@@ -24,6 +24,6 @@ export function normalizeArabic(str: string): string {
 
 export function checkAnswer(input: string, expected: string, language: string): boolean {
   const normalize = (s: string) =>
-    language === "ar" ? normalizeArabic(s) : s.toLowerCase().trim();
+    language === "ar" ? normalizeArabic(s) : s.toLowerCase().trim().replace(/[éèê]/g, "e").replace(/[àâ]/g, "a").replace(/[ùû]/g, "u").replace(/[îï]/g, "i").replace(/[ôö]/g, "o").replace(/ç/g, "c");
   return normalize(input) === normalize(expected);
 }

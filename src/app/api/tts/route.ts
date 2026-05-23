@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { synthesizeSpeech } from "@/lib/elevenlabs";
+import type { Language } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { text, language = "en" } = body;
+  const { text, language = "en" } = body as { text: string; language: Language };
 
   if (!text) {
     return NextResponse.json({ error: "Missing text" }, { status: 400 });

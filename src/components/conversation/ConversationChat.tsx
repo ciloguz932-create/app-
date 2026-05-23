@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 
 interface Message {
   role: "user" | "assistant";
@@ -11,12 +12,16 @@ interface Message {
 }
 
 interface ConversationChatProps {
-  language: "en" | "ar";
+  language: Language;
   difficulty: string;
+  scenarioId?: string;
+  initialMessage?: string;
 }
 
-export default function ConversationChat({ language, difficulty }: ConversationChatProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+export default function ConversationChat({ language, difficulty, scenarioId, initialMessage }: ConversationChatProps) {
+  const [messages, setMessages] = useState<Message[]>(
+    initialMessage ? [{ role: "assistant", content: initialMessage }] : []
+  );
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -55,6 +60,7 @@ export default function ConversationChat({ language, difficulty }: ConversationC
           messages: newMessages,
           language,
           difficulty,
+          scenarioId,
         }),
       });
 
@@ -97,6 +103,7 @@ export default function ConversationChat({ language, difficulty }: ConversationC
   };
 
   const isArabic = language === "ar";
+  const langConfig = LANGUAGE_CONFIG[language];
 
   return (
     <div className="flex flex-col h-full min-h-[500px]">
@@ -109,6 +116,8 @@ export default function ConversationChat({ language, difficulty }: ConversationC
             <p className="text-sm">
               {isArabic
                 ? "ابدأ المحادثة بأي موضوع تريده"
+                : language === "fr"
+                ? "Commencez la conversation sur n'importe quel sujet — votre tuteur corrigera les erreurs."
                 : "Say anything in English — your AI tutor will respond and gently correct mistakes."}
             </p>
           </div>
@@ -140,9 +149,9 @@ export default function ConversationChat({ language, difficulty }: ConversationC
                   msg.role === "user"
                     ? "bg-crimson text-cream rounded-tr-sm"
                     : "bg-cream border border-cream-darker text-charcoal rounded-tl-sm",
-                  isArabic ? "font-arabic text-base" : ""
+                  langConfig.fontClass
                 )}
-                dir={isArabic && msg.role === "assistant" ? "rtl" : "ltr"}
+                dir={isArabic ? "rtl" : "ltr"}
               >
                 {msg.content || (
                   <span className="flex items-center gap-1">
@@ -170,12 +179,16 @@ export default function ConversationChat({ language, difficulty }: ConversationC
                 sendMessage();
               }
             }}
-            placeholder={isArabic ? "اكتب رسالتك هنا..." : "Type your message... (Enter to send)"}
-            dir={isArabic ? "rtl" : "ltr"}
+            placeholder={
+              isArabic ? "اكتب رسالتك هنا..." :
+              language === "fr" ? "Écrivez votre message... (Entrée pour envoyer)" :
+              "Type your message... (Enter to send)"
+            }
+            dir={langConfig.dir}
             rows={1}
             className={cn(
               "flex-1 resize-none bg-cream border border-cream-darker rounded-xl px-4 py-3 text-charcoal placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-crimson/30 transition-all",
-              isArabic ? "font-arabic text-base" : "text-sm"
+              langConfig.fontClass || "text-sm"
             )}
           />
           <button

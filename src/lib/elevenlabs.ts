@@ -1,13 +1,16 @@
+import type { Language } from "@/lib/types";
+
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
-const VOICE_IDS = {
-  en: "EXAVITQu4vr4xnSDxMaL", // Sarah - natural English female voice
-  ar: "onwK4e9ZLuTAKqWW03F9", // Daniel - used for Arabic
+const VOICE_IDS: Record<Language, string> = {
+  en: "EXAVITQu4vr4xnSDxMaL", // Sarah - English
+  ar: "onwK4e9ZLuTAKqWW03F9", // Daniel - Arabic
+  fr: "cgSgspJ2msm6clMCkdW9", // Jessica - French accent
 };
 
 export async function synthesizeSpeech(
   text: string,
-  language: "en" | "ar"
+  language: Language
 ): Promise<ArrayBuffer> {
   const voiceId = VOICE_IDS[language];
 

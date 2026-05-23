@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Volume2, CheckCircle, XCircle, RefreshCw, SkipForward } from "lucide-react";
 import { checkAnswer } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 
 interface Card {
   id: string;
@@ -15,7 +16,7 @@ interface Card {
 }
 
 interface ListeningPlayerProps {
-  language: "en" | "ar";
+  language: Language;
 }
 
 export default function ListeningPlayer({ language }: ListeningPlayerProps) {
@@ -110,6 +111,7 @@ export default function ListeningPlayer({ language }: ListeningPlayerProps) {
 
   const card = cards[currentIndex];
   const isArabic = language === "ar";
+  const langConfig = LANGUAGE_CONFIG[language];
 
   return (
     <div className="space-y-6 max-w-xl mx-auto">
@@ -163,11 +165,11 @@ export default function ListeningPlayer({ language }: ListeningPlayerProps) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !revealed && handleCheck()}
-          placeholder={isArabic ? "اكتب ما سمعته..." : "Type what you heard..."}
-          dir={isArabic ? "rtl" : "ltr"}
+          placeholder={isArabic ? "اكتب ما سمعته..." : language === "fr" ? "Écrivez ce que vous avez entendu..." : "Type what you heard..."}
+          dir={langConfig.dir}
           className={cn(
             "w-full bg-cream border-2 border-cream-darker rounded-xl px-4 py-3 text-charcoal placeholder:text-muted/40 focus:outline-none focus:border-crimson transition-colors text-center text-lg",
-            isArabic ? "font-arabic" : "",
+            langConfig.fontClass,
             result === "correct" ? "border-emerald-500" : result === "wrong" ? "border-red-400" : ""
           )}
           disabled={revealed}
@@ -193,7 +195,7 @@ export default function ListeningPlayer({ language }: ListeningPlayerProps) {
                   {result === "correct" ? "Correct!" : "Not quite"}
                 </p>
                 {result === "wrong" && (
-                  <p className={cn("text-sm text-charcoal mt-0.5", isArabic ? "font-arabic" : "")}>
+                  <p className={cn("text-sm text-charcoal mt-0.5", langConfig.fontClass)}>
                     Answer: <strong>{card.word}</strong>
                   </p>
                 )}

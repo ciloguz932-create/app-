@@ -1,11 +1,13 @@
 import Anthropic from "@anthropic-ai/sdk";
+import type { Language, Scenario } from "@/lib/types";
+import { LANGUAGE_CONFIG } from "@/lib/types";
 
 export const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-export function buildSystemPrompt(language: "en" | "ar", difficulty: string): string {
-  const langName = language === "en" ? "English" : "Arabic";
+export function buildSystemPrompt(language: Language, difficulty: string): string {
+  const { label: langName } = LANGUAGE_CONFIG[language];
   return `You are Lumina, a warm and encouraging ${langName} language tutor. Your role:
 
 - Converse naturally at ${difficulty} level in ${langName}
@@ -17,4 +19,19 @@ export function buildSystemPrompt(language: "en" | "ar", difficulty: string): st
 - If the user writes in their native language (Turkish or English), respond in ${langName} but briefly acknowledge what they wrote
 
 Language: ${langName} | Difficulty: ${difficulty}`;
+}
+
+export function buildScenarioPrompt(scenario: Scenario, language: Language): string {
+  const { label: langName } = LANGUAGE_CONFIG[language];
+  const role = scenario.aiRole[language];
+  return `${role}
+
+Rules:
+- Respond ONLY in ${langName}
+- Keep responses natural and in-character (2-4 sentences)
+- If the user makes a language error, gently correct it in [square brackets]
+- Drive the scenario forward with realistic prompts
+- Stay fully in character — do not break the fourth wall or mention being an AI tutor
+
+Scenario: ${scenario.title} | Language: ${langName}`;
 }

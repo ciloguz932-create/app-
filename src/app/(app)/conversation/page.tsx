@@ -3,11 +3,13 @@
 import { useState } from "react";
 import ConversationChat from "@/components/conversation/ConversationChat";
 import { cn } from "@/lib/utils";
+import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 
 const difficulties = ["beginner", "intermediate", "advanced"];
+const languages: Language[] = ["en", "ar", "fr"];
 
 export default function ConversationPage() {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
+  const [language, setLanguage] = useState<Language>("en");
   const [difficulty, setDifficulty] = useState("intermediate");
   const [started, setStarted] = useState(false);
 
@@ -23,20 +25,23 @@ export default function ConversationPage() {
           <div>
             <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">Language</p>
             <div className="flex gap-3">
-              {(["en", "ar"] as const).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLanguage(l)}
-                  className={cn(
-                    "flex-1 py-3 rounded-xl font-semibold text-sm transition-all",
-                    language === l
-                      ? "bg-charcoal text-cream"
-                      : "bg-cream-dark border border-cream-darker text-muted hover:text-charcoal"
-                  )}
-                >
-                  {l === "en" ? "🇬🇧 English" : "🇸🇦 Arabic"}
-                </button>
-              ))}
+              {languages.map((l) => {
+                const { flag, label } = LANGUAGE_CONFIG[l];
+                return (
+                  <button
+                    key={l}
+                    onClick={() => setLanguage(l)}
+                    className={cn(
+                      "flex-1 py-3 rounded-xl font-semibold text-sm transition-all",
+                      language === l
+                        ? "bg-charcoal text-cream"
+                        : "bg-cream-dark border border-cream-darker text-muted hover:text-charcoal"
+                    )}
+                  >
+                    {flag} {label}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -76,13 +81,15 @@ export default function ConversationPage() {
     );
   }
 
+  const { flag, label } = LANGUAGE_CONFIG[language];
+
   return (
     <div className="max-w-2xl mx-auto h-full flex flex-col">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h1 className="text-xl font-serif font-bold text-charcoal">Conversation</h1>
           <p className="text-xs text-muted capitalize">
-            {language === "en" ? "English" : "Arabic"} · {difficulty}
+            {flag} {label} · {difficulty}
           </p>
         </div>
         <button

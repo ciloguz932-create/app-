@@ -11,6 +11,7 @@ import {
   FileText,
   BarChart3,
   GraduationCap,
+  Theater,
   X,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/vocabulary", label: "Vocabulary", icon: BookOpen },
   { href: "/conversation", label: "Conversation", icon: MessageCircle },
+  { href: "/scenarios", label: "Scenarios", icon: Theater },
   { href: "/listening", label: "Listening", icon: Headphones },
   { href: "/reading", label: "Reading", icon: FileText },
   { href: "/progress", label: "Progress", icon: BarChart3 },

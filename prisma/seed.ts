@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
-import { ENGLISH_WORDS, ARABIC_WORDS, READING_PASSAGES } from "../src/lib/seed-data";
+import { ENGLISH_WORDS, ARABIC_WORDS, FRENCH_WORDS, READING_PASSAGES } from "../src/lib/seed-data";
 
 const adapter = new PrismaLibSql({
   url: process.env.DATABASE_URL ?? "file:./prisma/dev.db",
@@ -17,7 +17,7 @@ async function main() {
     create: { id: 1, streak: 0, dailyGoal: 10 },
   });
 
-  const allWords = [...ENGLISH_WORDS, ...ARABIC_WORDS];
+  const allWords = [...ENGLISH_WORDS, ...ARABIC_WORDS, ...FRENCH_WORDS];
   let cardCount = 0;
 
   for (const word of allWords) {

@@ -124,8 +124,9 @@ export default function VocabularyPage() {
                   onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
                   className="w-full bg-white border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30"
                 >
-                  <option value="en">English</option>
-                  <option value="ar">Arabic</option>
+                  <option value="en">🇬🇧 English</option>
+                  <option value="ar">🇸🇦 Arabic</option>
+                  <option value="fr">🇫🇷 Français</option>
                 </select>
               </div>
               <div>
@@ -172,7 +173,7 @@ export default function VocabularyPage() {
         </div>
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-muted" />
-          {["all", "en", "ar"].map((l) => (
+          {["all", "en", "ar", "fr"].map((l) => (
             <button
               key={l}
               onClick={() => setLanguage(l)}
@@ -181,7 +182,7 @@ export default function VocabularyPage() {
                 language === l ? "bg-charcoal text-cream" : "bg-cream border border-cream-darker text-muted hover:text-charcoal"
               )}
             >
-              {l === "all" ? "All" : l === "en" ? "English" : "Arabic"}
+              {l === "all" ? "All" : l === "en" ? "🇬🇧 EN" : l === "ar" ? "🇸🇦 AR" : "🇫🇷 FR"}
             </button>
           ))}
         </div>
@@ -229,9 +230,11 @@ export default function VocabularyPage() {
               <div className="flex items-center gap-2">
                 <span className={cn(
                   "text-xs px-2 py-1 rounded-lg font-medium",
-                  card.language === "en" ? "bg-blue-50 text-blue-700" : "bg-emerald-50 text-emerald-700"
+                  card.language === "en" ? "bg-blue-50 text-blue-700" :
+                  card.language === "ar" ? "bg-emerald-50 text-emerald-700" :
+                  "bg-violet-50 text-violet-700"
                 )}>
-                  {card.language === "en" ? "EN" : "AR"}
+                  {card.language === "en" ? "🇬🇧" : card.language === "ar" ? "🇸🇦" : "🇫🇷"}
                 </span>
                 <span className="text-xs text-muted/60">{card.repetitions}×</span>
                 <button

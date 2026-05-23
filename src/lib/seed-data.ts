@@ -1,7 +1,7 @@
 export interface SeedCard {
   word: string;
   translation: string;
-  language: "en" | "ar";
+  language: "en" | "ar" | "fr";
   example?: string;
 }
 
@@ -166,7 +166,7 @@ export const ARABIC_WORDS: SeedCard[] = [
 export interface ReadingPassage {
   title: string;
   content: string;
-  language: "en" | "ar";
+  language: "en" | "ar" | "fr";
   difficulty: "beginner" | "intermediate" | "advanced";
   questions: Array<{
     question: string;
@@ -356,4 +356,159 @@ The path forward requires thoughtful governance, inclusive design, and a commitm
       },
     ],
   },
+  // ─── French passages ──────────────────────────────────────────────────────
+  {
+    title: "Les habitudes quotidiennes",
+    language: "fr" as const,
+    difficulty: "beginner" as const,
+    content: `Les habitudes quotidiennes ont un grand impact sur notre vie. Une habitude est une action que nous répétons régulièrement, souvent sans y penser. Les scientifiques disent qu'environ 40 % de nos actions sont des habitudes, pas des décisions conscientes.
+
+Les bonnes habitudes peuvent améliorer notre santé, nos relations et notre succès. Par exemple, lire chaque jour développe les connaissances. Faire de l'exercice régulièrement renforce le corps. Se coucher à la même heure chaque nuit améliore l'énergie.
+
+La clé pour former une nouvelle habitude est la répétition. Si vous faites quelque chose tous les jours pendant quelques semaines, cela commence à sembler naturel. Commencez par de petites étapes. Au lieu d'essayer de courir pendant une heure, commencez par seulement dix minutes.
+
+Briser les mauvaises habitudes est plus difficile, mais possible. La première étape est de remarquer l'habitude. Ensuite, trouvez un remplacement sain.
+
+Rappelez-vous : les habitudes ne se forment pas du jour au lendemain. Soyez patient avec vous-même et célébrez les petits progrès.`,
+    questions: [
+      {
+        question: "Quel pourcentage de nos actions sont des habitudes ?",
+        options: ["20 %", "30 %", "40 %", "50 %"],
+        answer: 2,
+      },
+      {
+        question: "Quelle est la clé pour former une nouvelle habitude ?",
+        options: ["La motivation", "La répétition", "La volonté", "La planification"],
+        answer: 1,
+      },
+      {
+        question: "Comment commencer une habitude d'exercice selon l'article ?",
+        options: ["Courir une heure", "Rejoindre une salle de sport", "Commencer par dix minutes", "S'exercer avec un ami"],
+        answer: 2,
+      },
+      {
+        question: "Quelle est la première étape pour briser une mauvaise habitude ?",
+        options: ["Trouver un remplacement", "Remarquer l'habitude", "Parler à un ami", "Faire du sport"],
+        answer: 1,
+      },
+    ],
+  },
+  {
+    title: "La gastronomie française",
+    language: "fr" as const,
+    difficulty: "intermediate" as const,
+    content: `La gastronomie française est reconnue dans le monde entier comme l'une des plus riches et des plus raffinées. En 2010, l'UNESCO a inscrit le « repas gastronomique des Français » au patrimoine culturel immatériel de l'humanité, reconnaissant ainsi son importance culturelle unique.
+
+Le repas français traditionnel est bien plus qu'une simple prise alimentaire. C'est un rituel social qui rassemble famille et amis autour d'une table soigneusement dressée. Il suit généralement une structure précise : l'apéritif, l'entrée, le plat principal, le fromage, et enfin le dessert. Chaque étape a sa propre importance et ses propres règles non écrites.
+
+La cuisine française est fondée sur des techniques précises transmises de génération en génération. Des sauces classiques comme la béchamel ou le velouté, aux méthodes de cuisson sophistiquées, les cuisiniers français ont développé un vocabulaire culinaire qui influence les cuisines du monde entier. Paris abrite certains des restaurants les plus étoilés au monde.
+
+Cependant, la gastronomie française n'est pas uniquement celle des grands restaurants. La boulangerie du coin, avec son pain frais sorti du four chaque matin, fait partie intégrante de l'identité culinaire française. La baguette, le croissant, et les pâtisseries fines sont autant de symboles d'un art de vivre.
+
+Face à la mondialisation et aux fast-foods, la France défend fièrement ses traditions culinaires tout en s'adaptant aux nouvelles tendances alimentaires.`,
+    questions: [
+      {
+        question: "Quand l'UNESCO a-t-elle inscrit le repas gastronomique français au patrimoine ?",
+        options: ["2005", "2008", "2010", "2015"],
+        answer: 2,
+      },
+      {
+        question: "Quelle est la structure correcte d'un repas français traditionnel ?",
+        options: ["Plat, entrée, dessert", "Apéritif, entrée, plat, fromage, dessert", "Soupe, plat, dessert", "Entrée, plat, café"],
+        answer: 1,
+      },
+      {
+        question: "Qu'est-ce que la béchamel ?",
+        options: ["Un dessert français", "Une sauce classique", "Un type de pain", "Une technique de cuisson"],
+        answer: 1,
+      },
+      {
+        question: "Selon l'article, qu'est-ce qui fait partie de l'identité culinaire française ?",
+        options: ["Les fast-foods", "La boulangerie et la baguette", "Les restaurants étoilés seulement", "Les épices exotiques"],
+        answer: 1,
+      },
+    ],
+  },
+];
+
+export const FRENCH_WORDS: SeedCard[] = [
+  { word: "belle", translation: "güzel / beautiful", language: "fr", example: "La ville est très belle en automne." },
+  { word: "amour", translation: "aşk, sevgi / love", language: "fr", example: "L'amour est la chose la plus importante." },
+  { word: "liberté", translation: "özgürlük / freedom", language: "fr", example: "La liberté est un droit fondamental." },
+  { word: "joie", translation: "sevinç / joy", language: "fr", example: "Les enfants ont l'air plein de joie." },
+  { word: "espoir", translation: "umut / hope", language: "fr", example: "Il ne faut jamais perdre espoir." },
+  { word: "rêve", translation: "rüya, hayal / dream", language: "fr", example: "Mon rêve est de voyager dans le monde." },
+  { word: "courage", translation: "cesaret / courage", language: "fr", example: "Il faut du courage pour parler en public." },
+  { word: "sagesse", translation: "bilgelik / wisdom", language: "fr", example: "La sagesse vient avec l'expérience." },
+  { word: "patience", translation: "sabır / patience", language: "fr", example: "La patience est une grande vertu." },
+  { word: "bonheur", translation: "mutluluk / happiness", language: "fr", example: "Le bonheur se trouve dans les petites choses." },
+  { word: "lumière", translation: "ışık / light", language: "fr", example: "La lumière du soleil entre par la fenêtre." },
+  { word: "vérité", translation: "gerçek, hakikat / truth", language: "fr", example: "La vérité finit toujours par éclater." },
+  { word: "amitié", translation: "dostluk / friendship", language: "fr", example: "L'amitié est un trésor précieux." },
+  { word: "famille", translation: "aile / family", language: "fr", example: "La famille est la chose la plus importante." },
+  { word: "maison", translation: "ev / house, home", language: "fr", example: "Je rentre à la maison après le travail." },
+  { word: "voyage", translation: "yolculuk, seyahat / journey, travel", language: "fr", example: "Le voyage élargit l'horizon." },
+  { word: "temps", translation: "zaman / time", language: "fr", example: "Le temps passe très vite." },
+  { word: "cœur", translation: "kalp / heart", language: "fr", example: "Elle parle avec son cœur." },
+  { word: "esprit", translation: "akıl, ruh / mind, spirit", language: "fr", example: "Un esprit sain dans un corps sain." },
+  { word: "vie", translation: "hayat / life", language: "fr", example: "La vie est belle quand on l'apprécie." },
+  { word: "connaissance", translation: "bilgi / knowledge", language: "fr", example: "La connaissance est une arme puissante." },
+  { word: "chanson", translation: "şarkı / song", language: "fr", example: "Cette chanson me rappelle mon enfance." },
+  { word: "livre", translation: "kitap / book", language: "fr", example: "Je lis un livre intéressant en ce moment." },
+  { word: "soleil", translation: "güneş / sun", language: "fr", example: "Le soleil brille aujourd'hui." },
+  { word: "mer", translation: "deniz / sea", language: "fr", example: "J'adore me promener au bord de la mer." },
+  { word: "montagne", translation: "dağ / mountain", language: "fr", example: "Les montagnes sont couvertes de neige." },
+  { word: "forêt", translation: "orman / forest", language: "fr", example: "Nous nous promenons dans la forêt." },
+  { word: "ville", translation: "şehir / city", language: "fr", example: "Paris est une belle ville." },
+  { word: "musique", translation: "müzik / music", language: "fr", example: "La musique adoucit les mœurs." },
+  { word: "art", translation: "sanat / art", language: "fr", example: "L'art est une forme d'expression." },
+  { word: "poésie", translation: "şiir / poetry", language: "fr", example: "La poésie touche l'âme." },
+  { word: "histoire", translation: "tarih, hikaye / history, story", language: "fr", example: "L'histoire de France est très riche." },
+  { word: "nature", translation: "doğa / nature", language: "fr", example: "Il faut protéger la nature." },
+  { word: "paix", translation: "barış / peace", language: "fr", example: "Nous souhaitons la paix dans le monde." },
+  { word: "force", translation: "güç, kuvvet / strength", language: "fr", example: "La vraie force vient de l'intérieur." },
+  { word: "mémoire", translation: "hafıza / memory", language: "fr", example: "Cette photo réveille de bons souvenirs." },
+  { word: "succès", translation: "başarı / success", language: "fr", example: "Le succès vient avec le travail." },
+  { word: "travail", translation: "iş, çalışma / work", language: "fr", example: "Le travail sérieux porte ses fruits." },
+  { word: "apprendre", translation: "öğrenmek / to learn", language: "fr", example: "Il n'est jamais trop tard pour apprendre." },
+  { word: "partager", translation: "paylaşmak / to share", language: "fr", example: "Partager, c'est montrer qu'on se soucie." },
+  { word: "comprendre", translation: "anlamak / to understand", language: "fr", example: "Comprendre l'autre, c'est le respecter." },
+  { word: "croire", translation: "inanmak / to believe", language: "fr", example: "Je crois en mes capacités." },
+  { word: "réussir", translation: "başarmak / to succeed", language: "fr", example: "Travailler dur permet de réussir." },
+  { word: "grandir", translation: "büyümek / to grow", language: "fr", example: "On grandit grâce à ses erreurs." },
+  { word: "changer", translation: "değişmek / to change", language: "fr", example: "Le monde change très vite." },
+  { word: "découvrir", translation: "keşfetmek / to discover", language: "fr", example: "J'aime découvrir de nouveaux endroits." },
+  { word: "créer", translation: "yaratmak / to create", language: "fr", example: "Créer quelque chose est une grande satisfaction." },
+  { word: "construire", translation: "inşa etmek / to build", language: "fr", example: "Il faut construire un avenir meilleur." },
+  { word: "bienveillance", translation: "iyilik, nezaket / kindness", language: "fr", example: "La bienveillance change le monde." },
+  { word: "diversité", translation: "çeşitlilik / diversity", language: "fr", example: "La diversité est une richesse." },
+  { word: "avenir", translation: "gelecek / future", language: "fr", example: "L'avenir appartient à ceux qui se lèvent tôt." },
+  { word: "effort", translation: "çaba, gayret / effort", language: "fr", example: "Chaque effort compte." },
+  { word: "résilience", translation: "dayanıklılık / resilience", language: "fr", example: "La résilience est la clé du succès." },
+  { word: "créativité", translation: "yaratıcılık / creativity", language: "fr", example: "La créativité n'a pas de limite." },
+  { word: "curiosité", translation: "merak / curiosity", language: "fr", example: "La curiosité est le moteur de l'apprentissage." },
+  { word: "persévérance", translation: "sebat, azim / perseverance", language: "fr", example: "La persévérance mène au succès." },
+  { word: "générosité", translation: "cömertlik / generosity", language: "fr", example: "La générosité rend heureux." },
+  { word: "gratitude", translation: "şükran / gratitude", language: "fr", example: "La gratitude embellit la vie." },
+  { word: "équilibre", translation: "denge / balance", language: "fr", example: "L'équilibre entre vie pro et perso est essentiel." },
+  { word: "harmonie", translation: "uyum / harmony", language: "fr", example: "Vivre en harmonie avec la nature." },
+  { word: "simplicité", translation: "sadelik / simplicity", language: "fr", example: "La simplicité est souvent la plus grande élégance." },
+  { word: "profond", translation: "derin / deep, profound", language: "fr", example: "C'est une pensée très profonde." },
+  { word: "précieux", translation: "değerli / precious", language: "fr", example: "Le temps est précieux." },
+  { word: "serein", translation: "sakin, huzurlu / serene", language: "fr", example: "Il reste serein face aux difficultés." },
+  { word: "chaleureux", translation: "sıcak, içten / warm, welcoming", language: "fr", example: "L'accueil était très chaleureux." },
+  { word: "épanouissement", translation: "kişisel gelişim / fulfilment", language: "fr", example: "L'épanouissement personnel est important." },
+  { word: "rayonner", translation: "parlamak, ışıldamak / to radiate", language: "fr", example: "Elle rayonne de bonheur." },
+  { word: "s'améliorer", translation: "gelişmek / to improve oneself", language: "fr", example: "On peut toujours s'améliorer." },
+  { word: "s'épanouir", translation: "gelişmek, açılmak / to flourish", language: "fr", example: "Les enfants s'épanouissent dans la nature." },
+  { word: "franchir", translation: "aşmak / to overcome, cross", language: "fr", example: "Il a franchi tous les obstacles." },
+  { word: "enrichir", translation: "zenginleştirmek / to enrich", language: "fr", example: "Les voyages enrichissent l'esprit." },
+  { word: "transmettre", translation: "aktarmak / to pass on, transmit", language: "fr", example: "Il faut transmettre nos valeurs." },
+  { word: "accomplir", translation: "başarmak, yerine getirmek / to accomplish", language: "fr", example: "Elle a accompli quelque chose d'extraordinaire." },
+  { word: "chemin", translation: "yol, patika / path, way", language: "fr", example: "Chaque chemin mène quelque part." },
+  { word: "horizon", translation: "ufuk / horizon", language: "fr", example: "Un nouvel horizon s'ouvre devant nous." },
+  { word: "lumignon", translation: "küçük ışık / small light, glimmer", language: "fr", example: "Un lumignon d'espoir dans l'obscurité." },
+  { word: "douceur", translation: "yumuşaklık, tatlılık / gentleness, sweetness", language: "fr", example: "La douceur de vivre en Provence." },
+  { word: "authenticité", translation: "özgünlük / authenticity", language: "fr", example: "L'authenticité est rare et précieuse." },
+  { word: "bienêtre", translation: "iyilik hali / wellbeing", language: "fr", example: "Le bien-être mental est aussi important que physique." },
 ];

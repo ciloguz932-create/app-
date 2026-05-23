@@ -1,11 +1,26 @@
 import { NextRequest } from "next/server";
-import { anthropic, buildSystemPrompt } from "@/lib/claude";
+import { anthropic, buildSystemPrompt, buildScenarioPrompt } from "@/lib/claude";
+import { SCENARIOS, type Language } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { messages, language = "en", difficulty = "intermediate" } = body;
+  const { messages, language = "en", difficulty = "intermediate", scenarioId } = body as {
+    messages: Array<{ role: "user" | "assistant"; content: string }>;
+    language: Language;
+    difficulty: string;
+    scenarioId?: string;
+  };
 
-  const systemPrompt = buildSystemPrompt(language, difficulty);
+  let systemPrompt: string;
+
+  if (scenarioId) {
+    const scenario = SCENARIOS.find((s) => s.id === scenarioId);
+    systemPrompt = scenario
+      ? buildScenarioPrompt(scenario, language)
+      : buildSystemPrompt(language, difficulty);
+  } else {
+    systemPrompt = buildSystemPrompt(language, difficulty);
+  }
 
   const stream = await anthropic.messages.create({
     model: "claude-sonnet-4-6",
