@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Card {
+  id          String   @id @default(cuid())
+  word        String
+  translation String
+  language    String
+  example     String?
+  notes       String?
+  interval    Int      @default(1)
+  easeFactor  Float    @default(2.5)
+  repetitions Int      @default(0)
+  dueDate     DateTime @default(now())
+  createdAt   DateTime @default(now())
+  reviews     Review[]
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  cardId     String
+  quality    Int
+  reviewedAt DateTime @default(now())
+  card       Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+}
+
+model StudySession {
+  id           String    @id @default(cuid())
+  type         String
+  cardsStudied Int       @default(0)
+  accuracy     Float     @default(0)
+  duration     Int       @default(0)
+  startedAt    DateTime  @default(now())
+  endedAt      DateTime?
+}
+
+model ProgressEntry {
+  id           String   @id @default(cuid())
+  date         DateTime @unique
+  cardsStudied Int
+  accuracy     Float
+}
+
+model AppState {
+  id          Int      @id @default(1)
+  streak      Int      @default(0)
+  lastStudied DateTime?
+  dailyGoal   Int      @default(10)
+}
+
+model ReadingPassage {
+  id         String @id @default(cuid())
+  title      String
+  content    String
+  language   String
+  difficulty String
+  questions  String
+}
