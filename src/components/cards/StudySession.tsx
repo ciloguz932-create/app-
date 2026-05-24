@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import FlashCard from "./FlashCard";
 import QualityButtons from "./QualityButtons";
 import { CheckCircle, BookOpen } from "lucide-react";
+import { sounds } from "@/lib/sounds";
+import { useTheme } from "@/components/ThemeProvider";
+import { XP_REWARDS } from "@/lib/badges";
 
 interface Card {
   id: string;
@@ -27,6 +30,7 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
   const [loading, setLoading] = useState(true);
   const [finished, setFinished] = useState(false);
   const startTime = useRef(Date.now());
+  const { addXP } = useTheme();
 
   useEffect(() => {
     fetch(`/api/cards/due?language=${language}&limit=20`)
@@ -38,6 +42,11 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
       });
   }, [language]);
 
+  const handleFlip = (f: boolean) => {
+    setFlipped(f);
+    if (f) sounds.flip();
+  };
+
   const handleQuality = async (quality: number) => {
     const card = cards[currentIndex];
     await fetch("/api/review", {
@@ -47,29 +56,30 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
     });
 
     const isCorrect = quality >= 4;
+    if (isCorrect) sounds.correct(); else sounds.wrong();
+
+    addXP(XP_REWARDS.cardReviewed + (isCorrect ? XP_REWARDS.correctAnswer : 0));
+
     const newCorrect = correct + (isCorrect ? 1 : 0);
     const newReviewed = reviewed + 1;
-
     setCorrect(newCorrect);
     setReviewed(newReviewed);
     setFlipped(false);
 
     if (currentIndex + 1 >= cards.length) {
-      // Session complete — save progress
       const duration = Math.floor((Date.now() - startTime.current) / 1000);
       const accuracy = cards.length > 0 ? newCorrect / cards.length : 0;
+      const isPerfect = accuracy === 1;
 
       await fetch("/api/progress", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          cardsStudied: newReviewed,
-          accuracy: Math.round(accuracy * 100),
-          type: "vocabulary",
-          duration,
-        }),
+        body: JSON.stringify({ cardsStudied: newReviewed, accuracy: Math.round(accuracy * 100), type: "vocabulary", duration }),
       });
       await fetch("/api/streak", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
+
+      addXP(XP_REWARDS.sessionComplete + (isPerfect ? XP_REWARDS.perfectSession : 0));
+      if (isPerfect) sounds.levelUp(); else sounds.streak();
 
       setFinished(true);
     } else {
@@ -100,11 +110,7 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
   if (finished) {
     const accuracy = Math.round((correct / cards.length) * 100);
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="text-center py-12"
-      >
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
         <div className="w-20 h-20 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle className="w-10 h-10 text-gold" />
         </div>
@@ -124,10 +130,7 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
             <div className="text-sm text-muted">Correct</div>
           </div>
         </div>
-        <button
-          onClick={() => window.location.reload()}
-          className="bg-crimson hover:bg-crimson-light text-cream px-8 py-3 rounded-xl font-semibold transition-colors"
-        >
+        <button onClick={() => window.location.reload()} className="bg-crimson hover:bg-crimson-light text-cream px-8 py-3 rounded-xl font-semibold transition-colors">
           Study Again
         </button>
       </motion.div>
@@ -139,52 +142,32 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
 
   return (
     <div className="space-y-8">
-      {/* Progress */}
       <div className="space-y-2">
         <div className="flex justify-between text-sm text-muted">
           <span>{currentIndex + 1} / {cards.length}</span>
           <span>{Math.round(progressPct)}%</span>
         </div>
         <div className="w-full bg-cream-darker rounded-full h-2">
-          <motion.div
-            className="bg-crimson h-2 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progressPct}%` }}
-            transition={{ duration: 0.3 }}
-          />
+          <motion.div className="bg-crimson h-2 rounded-full" initial={{ width: 0 }} animate={{ width: `${progressPct}%` }} transition={{ duration: 0.3 }} />
         </div>
       </div>
 
-      {/* Card */}
       <AnimatePresence mode="wait">
-        <motion.div
-          key={card.id}
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -40 }}
-          transition={{ duration: 0.2 }}
-        >
-          <FlashCard card={card} onFlip={setFlipped} />
+        <motion.div key={card.id} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.2 }}>
+          <FlashCard card={card} onFlip={handleFlip} />
         </motion.div>
       </AnimatePresence>
 
-      {/* Quality buttons — only show after flipping */}
       <AnimatePresence>
         {flipped && (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }}>
             <p className="text-center text-sm text-muted mb-4">How well did you know this?</p>
             <QualityButtons onSelect={handleQuality} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {!flipped && (
-        <p className="text-center text-sm text-muted/60">Click the card to reveal the answer</p>
-      )}
+      {!flipped && <p className="text-center text-sm text-muted/60">Click the card to reveal the answer</p>}
     </div>
   );
 }

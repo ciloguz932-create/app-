@@ -3,8 +3,9 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, Trash2, BookOpen, Filter } from "lucide-react";
+import { Plus, Search, Trash2, BookOpen, Filter, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { sounds } from "@/lib/sounds";
 
 interface Card {
   id: string;
@@ -14,12 +15,14 @@ interface Card {
   example?: string | null;
   dueDate: string;
   repetitions: number;
+  isFavorite?: boolean;
 }
 
 export default function VocabularyPage() {
   const [cards, setCards] = useState<Card[]>([]);
   const [search, setSearch] = useState("");
   const [language, setLanguage] = useState("all");
+  const [showFavorites, setShowFavorites] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ word: "", translation: "", language: "en", example: "" });
@@ -59,7 +62,19 @@ export default function VocabularyPage() {
     setCards((prev) => prev.filter((c) => c.id !== id));
   };
 
+  const handleFavorite = async (id: string, current: boolean) => {
+    await fetch(`/api/cards?id=${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isFavorite: !current }),
+    });
+    setCards((prev) => prev.map((c) => c.id === id ? { ...c, isFavorite: !current } : c));
+    if (!current) sounds.click();
+  };
+
   const isDue = (card: Card) => new Date(card.dueDate) <= new Date();
+
+  const displayedCards = showFavorites ? cards.filter((c) => c.isFavorite) : cards;
 
   return (
     <div className="max-w-4xl space-y-6">
@@ -171,7 +186,7 @@ export default function VocabularyPage() {
             className="w-full bg-cream border border-cream-darker rounded-xl pl-10 pr-4 py-2.5 text-sm text-charcoal placeholder:text-muted/50 focus:outline-none focus:ring-2 focus:ring-crimson/30"
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <Filter className="w-4 h-4 text-muted" />
           {["all", "en", "ar", "fr"].map((l) => (
             <button
@@ -185,6 +200,15 @@ export default function VocabularyPage() {
               {l === "all" ? "All" : l === "en" ? "🇬🇧 EN" : l === "ar" ? "🇸🇦 AR" : "🇫🇷 FR"}
             </button>
           ))}
+          <button
+            onClick={() => setShowFavorites(!showFavorites)}
+            className={cn(
+              "px-3 py-2 rounded-lg text-xs font-semibold transition-colors",
+              showFavorites ? "bg-gold text-charcoal" : "bg-cream border border-cream-darker text-muted hover:text-charcoal"
+            )}
+          >
+            ⭐ Fav
+          </button>
         </div>
       </div>
 
@@ -193,14 +217,14 @@ export default function VocabularyPage() {
         <div className="flex justify-center py-12">
           <div className="w-8 h-8 border-4 border-crimson/20 border-t-crimson rounded-full animate-spin" />
         </div>
-      ) : cards.length === 0 ? (
+      ) : displayedCards.length === 0 ? (
         <div className="text-center py-16 text-muted">
           <BookOpen className="w-10 h-10 mx-auto mb-3 text-muted/30" />
           <p>No cards found</p>
         </div>
       ) : (
         <div className="grid gap-3">
-          {cards.map((card, i) => (
+          {displayedCards.map((card, i) => (
             <motion.div
               key={card.id}
               initial={{ opacity: 0, y: 10 }}
@@ -237,6 +261,17 @@ export default function VocabularyPage() {
                   {card.language === "en" ? "🇬🇧" : card.language === "ar" ? "🇸🇦" : "🇫🇷"}
                 </span>
                 <span className="text-xs text-muted/60">{card.repetitions}×</span>
+                <button
+                  onClick={() => handleFavorite(card.id, !!card.isFavorite)}
+                  className={cn(
+                    "p-1.5 rounded-lg transition-all",
+                    card.isFavorite
+                      ? "text-rose-500 opacity-100"
+                      : "opacity-0 group-hover:opacity-100 text-muted hover:text-rose-500 hover:bg-rose-50"
+                  )}
+                >
+                  <Heart className={cn("w-4 h-4", card.isFavorite ? "fill-current" : "")} />
+                </button>
                 <button
                   onClick={() => handleDelete(card.id)}
                   className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-50 text-muted hover:text-red-500 transition-all"

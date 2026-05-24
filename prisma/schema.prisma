@@ -19,6 +19,7 @@ model Card {
   repetitions Int      @default(0)
   dueDate     DateTime @default(now())
   createdAt   DateTime @default(now())
+  isFavorite  Boolean  @default(false)
   reviews     Review[]
 }
 
@@ -52,6 +53,14 @@ model AppState {
   streak      Int      @default(0)
   lastStudied DateTime?
   dailyGoal   Int      @default(10)
+  xp          Int      @default(0)
+  level       Int      @default(1)
+}
+
+model Badge {
+  id         String   @id @default(cuid())
+  key        String   @unique
+  unlockedAt DateTime @default(now())
 }
 
 model ReadingPassage {

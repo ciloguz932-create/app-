@@ -39,6 +39,20 @@ export async function POST(req: NextRequest) {
   return NextResponse.json(card, { status: 201 });
 }
 
+export async function PATCH(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+
+  const body = await req.json();
+  const card = await prisma.card.update({
+    where: { id },
+    data: body,
+  });
+  return NextResponse.json(card);
+}
+
 export async function DELETE(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");

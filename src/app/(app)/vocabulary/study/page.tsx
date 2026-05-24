@@ -25,8 +25,8 @@ export default function StudyPage() {
       </div>
 
       {/* Language filter */}
-      <div className="flex gap-2">
-        {["all", "en", "ar"].map((l) => (
+      <div className="flex gap-2 flex-wrap">
+        {["all", "en", "ar", "fr"].map((l) => (
           <button
             key={l}
             onClick={() => setLanguage(l)}
@@ -35,7 +35,7 @@ export default function StudyPage() {
               language === l ? "bg-charcoal text-cream" : "bg-cream border border-cream-darker text-muted hover:text-charcoal"
             )}
           >
-            {l === "all" ? "All languages" : l === "en" ? "English" : "Arabic"}
+            {l === "all" ? "All languages" : l === "en" ? "🇬🇧 English" : l === "ar" ? "🇸🇦 Arabic" : "🇫🇷 Français"}
           </button>
         ))}
       </div>

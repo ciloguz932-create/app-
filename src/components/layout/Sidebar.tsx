@@ -12,8 +12,11 @@ import {
   BarChart3,
   GraduationCap,
   Theater,
+  Trophy,
   X,
 } from "lucide-react";
+import { ThemeSelector } from "@/components/ThemeSelector";
+import { XPBar } from "@/components/XPBar";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -23,6 +26,7 @@ const navItems = [
   { href: "/listening", label: "Listening", icon: Headphones },
   { href: "/reading", label: "Reading", icon: FileText },
   { href: "/progress", label: "Progress", icon: BarChart3 },
+  { href: "/badges", label: "Badges", icon: Trophy },
 ];
 
 interface SidebarProps {
@@ -35,36 +39,30 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
 
   return (
     <>
-      {/* Mobile overlay */}
       {open && (
-        <div
-          className="fixed inset-0 bg-charcoal/50 z-40 lg:hidden"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 bg-charcoal/50 z-40 lg:hidden" onClick={onClose} />
       )}
 
       <aside
         className={cn(
-          "fixed left-0 top-0 h-full w-64 bg-charcoal text-cream z-50 flex flex-col transition-transform duration-300",
+          "fixed left-0 top-0 h-full w-64 z-50 flex flex-col transition-transform duration-300",
           "lg:translate-x-0 lg:static lg:z-auto",
           open ? "translate-x-0" : "-translate-x-full"
         )}
+        style={{ backgroundColor: "var(--sidebar-bg)", color: "var(--sidebar-text)" }}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-6 py-6 border-b border-cream/10">
+        <div className="flex items-center justify-between px-6 py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-crimson rounded-lg flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 text-cream" />
+            <div className="w-9 h-9 bg-[var(--color-crimson)] rounded-lg flex items-center justify-center">
+              <GraduationCap className="w-5 h-5" style={{ color: "var(--sidebar-text)" }} />
             </div>
             <div>
-              <p className="font-serif text-lg font-semibold text-cream leading-none">Lumina</p>
-              <p className="text-xs text-gold font-medium tracking-wider">LINGUA</p>
+              <p className="font-serif text-lg font-semibold leading-none" style={{ color: "var(--sidebar-text)" }}>Lumina</p>
+              <p className="text-xs font-medium tracking-wider" style={{ color: "var(--color-gold)" }}>LINGUA</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="lg:hidden text-cream/60 hover:text-cream"
-          >
+          <button onClick={onClose} className="lg:hidden" style={{ color: "var(--sidebar-text)", opacity: 0.6 }}>
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -79,25 +77,30 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                 href={href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
-                  active
-                    ? "bg-crimson text-cream shadow-lg"
-                    : "text-cream/70 hover:text-cream hover:bg-cream/10"
+                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
                 )}
+                style={{
+                  backgroundColor: active ? "var(--color-crimson)" : "transparent",
+                  color: active ? "var(--sidebar-text)" : `color-mix(in srgb, var(--sidebar-text) 70%, transparent)`,
+                }}
               >
-                <Icon className={cn("w-5 h-5", active ? "text-cream" : "text-cream/50")} />
+                <Icon className="w-5 h-5" style={{ opacity: active ? 1 : 0.5 }} />
                 {label}
               </Link>
             );
           })}
         </nav>
 
-        {/* Bottom section */}
-        <div className="px-6 py-4 border-t border-cream/10">
-          <p className="text-xs text-cream/30 text-center font-serif italic">
-            "العلم نور"
-          </p>
-          <p className="text-xs text-cream/20 text-center mt-1">Knowledge is light</p>
+        {/* Bottom */}
+        <div className="px-4 py-4 space-y-4" style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          <XPBar />
+          <div>
+            <p className="text-[10px] uppercase tracking-wider mb-2" style={{ color: "var(--sidebar-text)", opacity: 0.4 }}>Theme</p>
+            <ThemeSelector />
+          </div>
+          <div className="text-center">
+            <p className="text-xs font-serif italic" style={{ color: "var(--sidebar-text)", opacity: 0.3 }}>"العلم نور"</p>
+          </div>
         </div>
       </aside>
     </>
