@@ -46,9 +46,16 @@ export async function PATCH(req: NextRequest) {
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
   const body = await req.json();
+  const data: Record<string, unknown> = {};
+  if (typeof body.word === "string") data.word = body.word;
+  if (typeof body.translation === "string") data.translation = body.translation;
+  if (typeof body.example === "string" || body.example === null) data.example = body.example;
+  if (typeof body.notes === "string" || body.notes === null) data.notes = body.notes;
+  if (typeof body.isFavorite === "boolean") data.isFavorite = body.isFavorite;
+
   const card = await prisma.card.update({
     where: { id },
-    data: body,
+    data,
   });
   return NextResponse.json(card);
 }

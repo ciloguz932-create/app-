@@ -30,15 +30,20 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
   const [loading, setLoading] = useState(true);
   const [finished, setFinished] = useState(false);
   const startTime = useRef(Date.now());
+  const submittingRef = useRef(false);
   const { addXP } = useTheme();
 
   useEffect(() => {
     fetch(`/api/cards/due?language=${language}&limit=20`)
       .then((r) => r.json())
       .then((data) => {
-        setCards(data);
+        setCards(Array.isArray(data) ? data : []);
         setLoading(false);
         startTime.current = Date.now();
+      })
+      .catch(() => {
+        setCards([]);
+        setLoading(false);
       });
   }, [language]);
 
@@ -48,7 +53,10 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
   };
 
   const handleQuality = async (quality: number) => {
+    if (submittingRef.current) return;
     const card = cards[currentIndex];
+    if (!card) return;
+    submittingRef.current = true;
     await fetch("/api/review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -82,8 +90,12 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
       if (isPerfect) sounds.levelUp(); else sounds.streak();
 
       setFinished(true);
+      submittingRef.current = false;
     } else {
-      setTimeout(() => setCurrentIndex((i) => i + 1), 150);
+      setTimeout(() => {
+        setCurrentIndex((i) => i + 1);
+        submittingRef.current = false;
+      }, 150);
     }
   };
 

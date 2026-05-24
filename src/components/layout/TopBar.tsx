@@ -64,13 +64,13 @@ export default function TopBar({ onMenuClick, title }: TopBarProps) {
         <div className="flex items-center gap-2">
           <div className="relative w-10 h-10">
             <svg width="40" height="40" viewBox="0 0 40 40" className="-rotate-90">
-              <circle cx="20" cy="20" r={radius} fill="none" stroke="#E5D9C5" strokeWidth="3" />
+              <circle cx="20" cy="20" r={radius} fill="none" stroke="var(--color-cream-darker)" strokeWidth="3" />
               <motion.circle
                 cx="20"
                 cy="20"
                 r={radius}
                 fill="none"
-                stroke="#C5A028"
+                stroke="var(--color-gold)"
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeDasharray={circumference}

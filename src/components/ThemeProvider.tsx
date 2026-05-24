@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { THEMES, applyTheme, getStoredTheme, type ThemeName } from "@/lib/themes";
 import { getLevel, xpToNextLevel, XP_REWARDS, checkBadges, BADGE_DEFS, type BadgeDef } from "@/lib/badges";
 
@@ -27,7 +27,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<ThemeName>("harvard");
   const [xp, setXp] = useState(0);
   const [earnedBadges, setEarnedBadges] = useState<string[]>([]);
-  const [newBadge, setNewBadge] = useState<BadgeDef | null>(null);
+  const [badgeQueue, setBadgeQueue] = useState<BadgeDef[]>([]);
+  const [badgesLoaded, setBadgesLoaded] = useState(false);
+  const badgeAwardInFlight = useRef(false);
 
   useEffect(() => {
     const storedTheme = getStoredTheme();
@@ -38,9 +40,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const storedXP = parseInt(localStorage.getItem("xp") ?? "0", 10);
     setXp(storedXP);
 
-    fetch("/api/badges").then((r) => r.json()).then((data: { key: string }[]) => {
-      setEarnedBadges(data.map((b) => b.key));
-    }).catch(() => {});
+    fetch("/api/badges")
+      .then((r) => r.json())
+      .then((data: { key: string }[]) => {
+        setEarnedBadges(Array.isArray(data) ? data.map((b) => b.key) : []);
+      })
+      .catch(() => {})
+      .finally(() => setBadgesLoaded(true));
   }, []);
 
   const setTheme = useCallback((t: ThemeName) => {
@@ -60,24 +66,42 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const level = getLevel(xp);
   const xpData = xpToNextLevel(xp);
 
-  const dismissBadge = useCallback(() => setNewBadge(null), []);
+  const newBadge = badgeQueue[0] ?? null;
+  const dismissBadge = useCallback(() => {
+    setBadgeQueue((q) => q.slice(1));
+  }, []);
 
-  // Check badges whenever xp or earnedBadges changes
   useEffect(() => {
-    if (earnedBadges.length === 0 && xp === 0) return;
+    if (!badgesLoaded) return;
+    if (badgeAwardInFlight.current) return;
     const totalCards = Math.floor(xp / XP_REWARDS.cardReviewed);
     const hour = new Date().getHours();
     const newKeys = checkBadges({ totalCards, streak: 0, level, accuracy: 0, hour, earnedKeys: earnedBadges });
-    if (newKeys.length > 0) {
-      const key = newKeys[0];
-      fetch("/api/badges", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key }) })
-        .then(() => {
-          setEarnedBadges((prev) => [...prev, key]);
+    if (newKeys.length === 0) return;
+
+    badgeAwardInFlight.current = true;
+    (async () => {
+      const awardedDefs: BadgeDef[] = [];
+      for (const key of newKeys) {
+        try {
+          await fetch("/api/badges", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ key }),
+          });
           const def = BADGE_DEFS.find((b) => b.key === key);
-          if (def) setNewBadge(def);
-        }).catch(() => {});
-    }
-  }, [xp, level, earnedBadges]);
+          if (def) awardedDefs.push(def);
+        } catch {
+          // skip on failure
+        }
+      }
+      if (awardedDefs.length > 0) {
+        setEarnedBadges((prev) => [...prev, ...awardedDefs.map((d) => d.key)]);
+        setBadgeQueue((q) => [...q, ...awardedDefs]);
+      }
+      badgeAwardInFlight.current = false;
+    })();
+  }, [xp, level, earnedBadges, badgesLoaded]);
 
   return (
     <Ctx.Provider value={{ theme, setTheme, xp, level, xpProgress: { current: xpData.current, needed: xpData.needed }, addXP, earnedBadges, newBadge, dismissBadge }}>
