@@ -13,6 +13,9 @@ import {
   GraduationCap,
   Theater,
   Trophy,
+  Library,
+  Brain,
+  PenTool,
   X,
 } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
@@ -21,8 +24,11 @@ import { XPBar } from "@/components/XPBar";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/vocabulary", label: "Vocabulary", icon: BookOpen },
+  { href: "/courses", label: "Courses", icon: Library },
   { href: "/conversation", label: "Conversation", icon: MessageCircle },
   { href: "/scenarios", label: "Scenarios", icon: Theater },
+  { href: "/feynman", label: "Feynman", icon: Brain },
+  { href: "/writing", label: "Writing", icon: PenTool },
   { href: "/listening", label: "Listening", icon: Headphones },
   { href: "/reading", label: "Reading", icon: FileText },
   { href: "/progress", label: "Progress", icon: BarChart3 },

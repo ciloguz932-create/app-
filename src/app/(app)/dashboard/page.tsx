@@ -12,6 +12,9 @@ import {
   Target,
   TrendingUp,
   ChevronRight,
+  Library,
+  Brain,
+  PenTool,
 } from "lucide-react";
 
 interface AppState {
@@ -57,6 +60,36 @@ const quickActions = [
     icon: FileText,
     color: "bg-cream-dark border border-cream-darker",
     textColor: "text-charcoal",
+  },
+];
+
+const learningTechniques = [
+  {
+    href: "/courses",
+    label: "Courses",
+    description: "Topic-based vocabulary packs",
+    icon: Library,
+    color: "bg-cream border-2 border-cream-darker",
+    textColor: "text-charcoal",
+    iconColor: "text-crimson",
+  },
+  {
+    href: "/feynman",
+    label: "Feynman",
+    description: "Teach to learn deeply",
+    icon: Brain,
+    color: "bg-cream border-2 border-cream-darker",
+    textColor: "text-charcoal",
+    iconColor: "text-gold-dark",
+  },
+  {
+    href: "/writing",
+    label: "Writing",
+    description: "Sentence practice with AI feedback",
+    icon: PenTool,
+    color: "bg-cream border-2 border-cream-darker",
+    textColor: "text-charcoal",
+    iconColor: "text-charcoal",
   },
 ];
 
@@ -230,6 +263,30 @@ export default function DashboardPage() {
                 className={`block ${color} rounded-2xl p-5 hover:scale-[1.02] transition-transform group`}
               >
                 <Icon className={`w-6 h-6 ${textColor} mb-3 group-hover:scale-110 transition-transform`} />
+                <p className={`font-semibold ${textColor} text-sm`}>{label}</p>
+                <p className={`text-xs mt-0.5 ${textColor} opacity-70`}>{description}</p>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Learning Techniques */}
+      <div>
+        <h2 className="text-lg font-serif font-semibold text-charcoal mb-4">Learning Techniques</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {learningTechniques.map(({ href, label, description, icon: Icon, color, textColor, iconColor }, i) => (
+            <motion.div
+              key={href}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 + 0.3 }}
+            >
+              <Link
+                href={href}
+                className={`block ${color} rounded-2xl p-5 hover:scale-[1.02] hover:border-crimson/30 transition-all group`}
+              >
+                <Icon className={`w-6 h-6 ${iconColor} mb-3 group-hover:scale-110 transition-transform`} />
                 <p className={`font-semibold ${textColor} text-sm`}>{label}</p>
                 <p className={`text-xs mt-0.5 ${textColor} opacity-70`}>{description}</p>
               </Link>
