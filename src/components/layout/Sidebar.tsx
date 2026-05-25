@@ -16,6 +16,7 @@ import {
   Library,
   Brain,
   PenTool,
+  Settings,
   X,
 } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
@@ -33,6 +34,7 @@ const navItems = [
   { href: "/reading", label: "Reading", icon: FileText },
   { href: "/progress", label: "Progress", icon: BarChart3 },
   { href: "/badges", label: "Badges", icon: Trophy },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 interface SidebarProps {

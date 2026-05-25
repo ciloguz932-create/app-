@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, PenTool, RefreshCw, Send, Sparkles } from "lucide-react";
 import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface Card {
   id: string;
@@ -51,6 +52,7 @@ const gradeStyles: Record<Grade, { label: string; container: string; chip: strin
 const EMPTY: [string, string, string] = ["", "", ""];
 
 export default function WritingPage() {
+  const { aiProvider } = useTheme();
   const [language, setLanguage] = useState<Language>("en");
   const [cards, setCards] = useState<Card[]>([]);
   const [loadingCards, setLoadingCards] = useState(false);
@@ -97,6 +99,7 @@ export default function WritingPage() {
           word: activeCard.word,
           sentences: sentences.map((s) => s.trim()),
           language,
+          provider: aiProvider,
         }),
       });
       const data = await res.json();

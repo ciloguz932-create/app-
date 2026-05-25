@@ -5,6 +5,7 @@ import { Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface Message {
   role: "user" | "assistant";
@@ -26,6 +27,7 @@ export default function ConversationChat({ language, difficulty, scenarioId, ini
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { aiProvider } = useTheme();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,6 +63,7 @@ export default function ConversationChat({ language, difficulty, scenarioId, ini
           language,
           difficulty,
           scenarioId,
+          provider: aiProvider,
         }),
       });
 

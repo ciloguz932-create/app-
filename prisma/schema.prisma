@@ -55,6 +55,7 @@ model AppState {
   dailyGoal   Int      @default(10)
   xp          Int      @default(0)
   level       Int      @default(1)
+  aiProvider  String   @default("claude")
 }
 
 model Badge {

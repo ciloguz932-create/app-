@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Loader2, RefreshCw, Send, Sparkles } from "lucide-react";
 import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/components/ThemeProvider";
 
 interface Card {
   id: string;
@@ -47,6 +48,7 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
 }
 
 export default function FeynmanPage() {
+  const { aiProvider } = useTheme();
   const [language, setLanguage] = useState<Language>("en");
   const [cards, setCards] = useState<Card[]>([]);
   const [loadingCards, setLoadingCards] = useState(false);
@@ -92,6 +94,7 @@ export default function FeynmanPage() {
           translation: activeCard.translation,
           explanation: explanation.trim(),
           language,
+          provider: aiProvider,
         }),
       });
       const data = await res.json();

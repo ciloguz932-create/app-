@@ -1,19 +1,36 @@
 import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/claude";
+import { callGemini, isGeminiAvailable } from "@/lib/gemini";
 import type { Language } from "@/lib/types";
 import { LANGUAGE_CONFIG } from "@/lib/types";
 
-export async function POST(req: Request) {
-  const { word, translation, explanation, language } = (await req.json()) as {
-    word: string;
-    translation: string;
-    explanation: string;
-    language: Language;
-  };
+function resolveProvider(requested: string): "claude" | "gemini" {
+  if (requested === "gemini" && isGeminiAvailable()) return "gemini";
+  if (requested === "auto") return isGeminiAvailable() ? "gemini" : "claude";
+  return "claude";
+}
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+export async function POST(req: Request) {
+  const { word, translation, explanation, language, provider: requestedProvider = "claude" } =
+    (await req.json()) as {
+      word: string;
+      translation: string;
+      explanation: string;
+      language: Language;
+      provider?: string;
+    };
+
+  const provider = resolveProvider(requestedProvider);
+
+  if (provider === "claude" && !process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
       { error: "AI not configured. Add ANTHROPIC_API_KEY." },
+      { status: 503 }
+    );
+  }
+  if (provider === "gemini" && !process.env.GEMINI_API_KEY) {
+    return NextResponse.json(
+      { error: "Gemini not configured. Add GEMINI_API_KEY." },
       { status: 503 }
     );
   }
@@ -39,13 +56,18 @@ Respond in JSON only, no other text:
   "improvedVersion": "<a model explanation in simple ${langName}, 1-2 sentences>"
 }`;
 
-  const msg = await anthropic.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 600,
-    messages: [{ role: "user", content: prompt }],
-  });
+  let text: string;
+  if (provider === "gemini") {
+    text = await callGemini(prompt, 600);
+  } else {
+    const msg = await anthropic.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 600,
+      messages: [{ role: "user", content: prompt }],
+    });
+    text = msg.content[0].type === "text" ? msg.content[0].text : "";
+  }
 
-  const text = msg.content[0].type === "text" ? msg.content[0].text : "";
   try {
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : text);
