@@ -4,7 +4,8 @@ import { PrismaLibSql } from "@prisma/adapter-libsql";
 import { ENGLISH_WORDS, ARABIC_WORDS, FRENCH_WORDS, READING_PASSAGES } from "../src/lib/seed-data";
 
 const adapter = new PrismaLibSql({
-  url: process.env.DATABASE_URL ?? "file:./prisma/dev.db",
+  url: process.env.TURSO_DATABASE_URL ?? process.env.DATABASE_URL ?? "file:./prisma/dev.db",
+  authToken: process.env.TURSO_AUTH_TOKEN,
 });
 const prisma = new PrismaClient({ adapter } as ConstructorParameters<typeof PrismaClient>[0]);
 
