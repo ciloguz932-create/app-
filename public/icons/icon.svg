@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#B52030"/>
+      <stop offset="100%" style="stop-color:#8B1525"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <!-- Mortarboard / graduation cap -->
+  <polygon points="256,110 440,196 256,282 72,196" fill="#C5A028"/>
+  <path d="M152 218 L152 318 Q152 354 200 372 Q228 382 256 382 Q284 382 312 372 Q360 354 360 318 L360 218 L256 282 Z" fill="#C5A028" opacity="0.85"/>
+  <line x1="440" y1="196" x2="440" y2="300" stroke="#C5A028" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="440" cy="310" r="22" fill="#C5A028"/>
+  <!-- Inner highlight on diamond -->
+  <polygon points="256,138 406,210 256,255 106,210" fill="#E8C84A" opacity="0.3"/>
+</svg>
