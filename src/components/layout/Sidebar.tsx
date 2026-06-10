@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -17,10 +17,14 @@ import {
   Brain,
   PenTool,
   Settings,
+  Medal,
+  ShieldCheck,
+  LogOut,
   X,
 } from "lucide-react";
 import { ThemeSelector } from "@/components/ThemeSelector";
 import { XPBar } from "@/components/XPBar";
+import { useTheme } from "@/components/ThemeProvider";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -33,6 +37,7 @@ const navItems = [
   { href: "/listening", label: "Listening", icon: Headphones },
   { href: "/reading", label: "Reading", icon: FileText },
   { href: "/progress", label: "Progress", icon: BarChart3 },
+  { href: "/leaderboard", label: "Leaderboard", icon: Medal },
   { href: "/badges", label: "Badges", icon: Trophy },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
@@ -44,6 +49,14 @@ interface SidebarProps {
 
 export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useTheme();
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <>
@@ -97,10 +110,59 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               </Link>
             );
           })}
+          {user?.role === "admin" && (
+            <Link
+              href="/admin"
+              onClick={onClose}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+              style={{
+                backgroundColor: pathname.startsWith("/admin") ? "var(--color-gold)" : "transparent",
+                color: pathname.startsWith("/admin")
+                  ? "#2C2C2C"
+                  : `color-mix(in srgb, var(--color-gold) 85%, transparent)`,
+              }}
+            >
+              <ShieldCheck className="w-5 h-5" />
+              Admin
+            </Link>
+          )}
         </nav>
 
         {/* Bottom */}
         <div className="px-4 py-4 space-y-4" style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+          {user && (
+            <div className="flex items-center gap-3 px-1">
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center text-lg flex-shrink-0"
+                style={{ backgroundColor: user.avatarColor }}
+              >
+                {user.avatarEmoji}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-sm font-semibold truncate" style={{ color: "var(--sidebar-text)" }}>
+                    {user.name}
+                  </p>
+                  {user.plan !== "free" && (
+                    <span className="text-[9px] font-bold uppercase tracking-wider bg-[var(--color-gold)] text-charcoal px-1.5 py-0.5 rounded-full">
+                      {user.plan === "pro" ? "PRO" : "KURUM"}
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] truncate" style={{ color: "var(--sidebar-text)", opacity: 0.5 }}>
+                  {user.email}
+                </p>
+              </div>
+              <button
+                onClick={handleLogout}
+                title="Çıkış yap"
+                className="p-1.5 rounded-lg transition-opacity hover:opacity-100"
+                style={{ color: "var(--sidebar-text)", opacity: 0.5 }}
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          )}
           <XPBar />
           <div>
             <p className="text-[10px] uppercase tracking-wider mb-2" style={{ color: "var(--sidebar-text)", opacity: 0.4 }}>Theme</p>

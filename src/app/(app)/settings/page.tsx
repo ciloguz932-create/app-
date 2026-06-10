@@ -39,11 +39,20 @@ const PROVIDERS: { id: AIProvider; label: string; description: string; icon: str
 const GOAL_OPTIONS = [5, 10, 20, 30];
 
 export default function SettingsPage() {
-  const { aiProvider, setAIProvider } = useTheme();
+  const { aiProvider, setAIProvider, user } = useTheme();
   const [serverSettings, setServerSettings] = useState<ServerSettings | null>(null);
   const [dailyGoal, setDailyGoal] = useState(10);
   const [saved, setSaved] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [providerError, setProviderError] = useState<string | null>(null);
+
+  const handleProviderSelect = async (p: AIProvider) => {
+    setProviderError(null);
+    const ok = await setAIProvider(p);
+    if (!ok && p !== "claude" && user?.plan === "free") {
+      setProviderError("Gemini ve Auto modu Pro planda kullanılabilir. Yükseltmek için Pricing sayfasına göz at.");
+    }
+  };
 
   useEffect(() => {
     fetch("/api/settings")
@@ -109,7 +118,7 @@ export default function SettingsPage() {
             return (
               <button
                 key={p.id}
-                onClick={() => setAIProvider(p.id)}
+                onClick={() => handleProviderSelect(p.id)}
                 className={cn(
                   "w-full text-left p-4 rounded-xl border-2 transition-all",
                   active
@@ -141,6 +150,15 @@ export default function SettingsPage() {
             );
           })}
         </div>
+
+        {providerError && (
+          <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5">
+            {providerError}{" "}
+            <a href="/pricing" className="font-semibold text-crimson hover:underline">
+              Planları gör →
+            </a>
+          </p>
+        )}
       </section>
 
       {/* API Key Status */}
