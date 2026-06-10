@@ -3,6 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { getCourse } from "@/lib/courses";
 
+export async function GET() {
+  const session = await getSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const installs = await prisma.contentInstall.findMany({
+    where: { userId: session.userId, kind: "course" },
+    select: { contentId: true },
+  });
+
+  return NextResponse.json({ enrolled: installs.map((i) => i.contentId) });
+}
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -36,6 +48,18 @@ export async function POST(req: Request) {
       added++;
     }
   }
+
+  await prisma.contentInstall.upsert({
+    where: {
+      userId_kind_contentId: {
+        userId: session.userId,
+        kind: "course",
+        contentId: course.id,
+      },
+    },
+    update: {},
+    create: { userId: session.userId, kind: "course", contentId: course.id },
+  });
 
   return NextResponse.json({ added, total: course.vocabulary.length });
 }

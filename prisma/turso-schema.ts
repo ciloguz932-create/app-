@@ -114,6 +114,16 @@ const TABLES = [
     "difficulty" TEXT NOT NULL,
     "questions" TEXT NOT NULL
   )`,
+  `CREATE TABLE IF NOT EXISTS "ContentInstall" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT NOT NULL,
+    "kind" TEXT NOT NULL,
+    "contentId" TEXT NOT NULL,
+    "installedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE
+  )`,
+  `CREATE UNIQUE INDEX IF NOT EXISTS "ContentInstall_userId_kind_contentId_key" ON "ContentInstall"("userId", "kind", "contentId")`,
+  `CREATE INDEX IF NOT EXISTS "ContentInstall_userId_idx" ON "ContentInstall"("userId")`,
 ];
 
 async function main() {

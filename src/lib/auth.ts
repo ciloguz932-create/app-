@@ -1,9 +1,18 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-const SECRET = new TextEncoder().encode(
-  process.env.AUTH_SECRET ?? "lumina-dev-secret-change-in-production"
-);
+const DEV_SECRET = "lumina-dev-secret-change-in-production";
+const rawSecret = process.env.AUTH_SECRET ?? DEV_SECRET;
+
+// Fail loudly on real deployments instead of silently signing sessions
+// with a publicly-known secret.
+if (process.env.VERCEL && rawSecret === DEV_SECRET) {
+  throw new Error(
+    "AUTH_SECRET is not set (or still the dev default). Set a strong random AUTH_SECRET in your deployment environment variables."
+  );
+}
+
+const SECRET = new TextEncoder().encode(rawSecret);
 
 const COOKIE_NAME = "lumina_session";
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 days

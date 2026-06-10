@@ -14,26 +14,38 @@ const difficultyColors: Record<string, string> = {
   advanced: "text-red-600 bg-red-50 border-red-200",
 };
 
-const STORAGE_KEY = "enrolled_courses";
+const LEGACY_STORAGE_KEY = "enrolled_courses";
 
-function readEnrolled(): string[] {
-  if (typeof window === "undefined") return [];
+// Enrollments used to live in localStorage; push any leftover local ids
+// to the server once, then drop the key.
+async function migrateLegacyEnrollments(): Promise<void> {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.filter((v) => typeof v === "string") : [];
+    const raw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (!raw) return;
+    const ids = JSON.parse(raw);
+    if (Array.isArray(ids)) {
+      for (const courseId of ids.filter((v) => typeof v === "string")) {
+        await fetch("/api/courses/enroll", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ courseId }),
+        }).catch(() => {});
+      }
+    }
+    window.localStorage.removeItem(LEGACY_STORAGE_KEY);
   } catch {
-    return [];
+    /* noop */
   }
 }
 
-function writeEnrolled(ids: string[]) {
-  if (typeof window === "undefined") return;
+async function fetchEnrolled(): Promise<string[]> {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    const res = await fetch("/api/courses/enroll");
+    if (!res.ok) return [];
+    const data = (await res.json()) as { enrolled?: string[] };
+    return data.enrolled ?? [];
   } catch {
-    /* noop */
+    return [];
   }
 }
 
@@ -45,7 +57,7 @@ export default function CoursesPage() {
   const [toast, setToast] = useState<{ title: string; subtitle?: string } | null>(null);
 
   useEffect(() => {
-    setEnrolled(readEnrolled());
+    migrateLegacyEnrollments().then(fetchEnrolled).then(setEnrolled);
   }, []);
 
   const showToast = (title: string, subtitle?: string) => {
@@ -64,9 +76,7 @@ export default function CoursesPage() {
       const data = (await res.json()) as { added?: number; total?: number; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Enrollment failed");
 
-      const next = enrolled.includes(course.id) ? enrolled : [...enrolled, course.id];
-      setEnrolled(next);
-      writeEnrolled(next);
+      setEnrolled((prev) => (prev.includes(course.id) ? prev : [...prev, course.id]));
 
       showToast(
         `Enrolled in ${course.title}`,

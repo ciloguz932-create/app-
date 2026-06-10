@@ -26,6 +26,20 @@ model User {
   appState      AppState?
   xpEvents      XpEvent[]
   usage         UsageCounter[]
+  installs      ContentInstall[]
+}
+
+// Tracks per-user installed content: course enrollments and content packages
+model ContentInstall {
+  id          String   @id @default(cuid())
+  userId      String
+  kind        String // "course" | "package"
+  contentId   String
+  installedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, kind, contentId])
+  @@index([userId])
 }
 
 model XpEvent {
