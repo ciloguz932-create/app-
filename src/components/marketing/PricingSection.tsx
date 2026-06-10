@@ -59,7 +59,7 @@ const TIERS = [
 
 export function PricingSection({ loggedIn = false }: { loggedIn?: boolean }) {
   return (
-    <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
       {TIERS.map((tier, i) => {
         const Icon = tier.icon;
         const href = loggedIn
@@ -77,7 +77,7 @@ export function PricingSection({ loggedIn = false }: { loggedIn?: boolean }) {
             className={cn(
               "rounded-3xl p-7 border-2 flex flex-col",
               tier.highlight
-                ? "bg-charcoal text-cream border-gold shadow-xl scale-[1.03]"
+                ? "bg-charcoal text-cream border-gold shadow-xl sm:scale-[1.03]"
                 : "bg-white text-charcoal border-cream-darker"
             )}
           >

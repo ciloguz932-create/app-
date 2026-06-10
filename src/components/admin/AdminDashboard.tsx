@@ -251,15 +251,15 @@ export default function AdminDashboard() {
                         {PLAN_LABELS[u.plan] ?? u.plan}
                       </span>
                     </td>
-                    <td className="px-4 py-3 font-semibold text-charcoal">{u.level}</td>
-                    <td className="px-4 py-3 text-charcoal">{u.xp.toLocaleString("tr-TR")}</td>
+                    <td className="px-4 py-3 font-semibold text-charcoal text-xs sm:text-sm">{u.level}</td>
+                    <td className="px-4 py-3 text-charcoal text-xs sm:text-sm">{u.xp.toLocaleString("tr-TR")}</td>
                     <td className="px-4 py-3">
                       <span className="flex items-center gap-1 text-charcoal">
                         <Flame className="w-3.5 h-3.5 text-gold" /> {u.streak}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-charcoal">{u.cards}</td>
-                    <td className="px-4 py-3 text-charcoal">{u.reviews}</td>
+                    <td className="px-4 py-3 text-charcoal text-xs sm:text-sm">{u.cards}</td>
+                    <td className="px-4 py-3 text-charcoal text-xs sm:text-sm">{u.reviews}</td>
                   </tr>
                 ))}
               </tbody>

@@ -42,7 +42,7 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeName>("harvard");
+  const [theme, setThemeState] = useState<ThemeName>("light");
   const [user, setUser] = useState<SessionUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [xp, setXp] = useState(0);

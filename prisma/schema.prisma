@@ -16,8 +16,10 @@ model User {
   avatarColor   String    @default("#A51C30")
   role          String    @default("user")
   plan          String    @default("free")
-  planUpdatedAt DateTime?
-  createdAt     DateTime  @default(now())
+  planUpdatedAt        DateTime?
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  createdAt            DateTime  @default(now())
   cards         Card[]
   reviews       Review[]
   sessions      StudySession[]

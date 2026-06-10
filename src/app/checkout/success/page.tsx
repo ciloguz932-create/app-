@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Crown, ArrowRight } from "lucide-react";
@@ -11,10 +11,24 @@ const CONFETTI_COLORS = ["#A51C30", "#C5A028", "#E8C84A", "#2E6B4F", "#1E5A8A"];
 
 export default function CheckoutSuccessPage() {
   const { refreshMe } = useTheme();
+  const didRun = useRef(false);
 
   useEffect(() => {
-    refreshMe();
+    if (didRun.current) return;
+    didRun.current = true;
+
     sounds.levelUp();
+
+    // Re-sign cookie with updated plan from DB (webhook may have just fired).
+    // Retry once after 3s to handle webhook race condition.
+    const syncSession = () =>
+      fetch("/api/auth/refresh", { method: "POST" }).catch(() => {});
+
+    syncSession().then(() => {
+      setTimeout(() => {
+        syncSession().then(refreshMe);
+      }, 3000);
+    });
   }, [refreshMe]);
 
   return (

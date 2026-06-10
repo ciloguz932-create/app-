@@ -36,7 +36,7 @@ export default async function PricingPage() {
       </nav>
 
       <div className="px-6 py-12">
-        <h1 className="font-serif text-4xl font-bold text-charcoal text-center mb-3">
+        <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-charcoal text-center mb-3">
           Planını seç
         </h1>
         <p className="text-muted text-center mb-12">

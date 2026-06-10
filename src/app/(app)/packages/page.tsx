@@ -99,7 +99,7 @@ export default function PackagesPage() {
         </button>
 
         <div className="text-center space-y-2">
-          <span className="text-5xl">{selected.emoji}</span>
+          <span className="text-4xl sm:text-5xl">{selected.emoji}</span>
           <h2 className="text-2xl font-serif font-bold text-charcoal">{selected.title}</h2>
           <p className="text-muted text-sm max-w-xl mx-auto">{selected.description}</p>
           <div className="flex items-center justify-center gap-2 pt-1">

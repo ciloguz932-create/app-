@@ -19,6 +19,8 @@ const TABLES = [
     "role" TEXT NOT NULL DEFAULT 'user',
     "plan" TEXT NOT NULL DEFAULT 'free',
     "planUpdatedAt" DATETIME,
+    "stripeCustomerId" TEXT,
+    "stripeSubscriptionId" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE TABLE IF NOT EXISTS "XpEvent" (

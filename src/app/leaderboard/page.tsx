@@ -104,7 +104,7 @@ export default function LeaderboardPage() {
           <>
             {/* Podium */}
             {top3.length > 0 && (
-              <div className="flex items-end justify-center gap-4 mb-10">
+              <div className="flex items-end justify-center gap-2 sm:gap-4 mb-10">
                 {[1, 0, 2].map((idx) => {
                   const entry = top3[idx];
                   if (!entry) return null;
@@ -116,7 +116,7 @@ export default function LeaderboardPage() {
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.15 }}
-                      className="flex flex-col items-center flex-1 max-w-[140px]"
+                      className="flex flex-col items-center flex-1 max-w-[100px] sm:max-w-[140px]"
                     >
                       <span className="text-2xl mb-1">{style.label}</span>
                       <div

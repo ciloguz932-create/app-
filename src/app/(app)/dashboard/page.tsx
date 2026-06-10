@@ -138,7 +138,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Streak */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -250,7 +250,7 @@ export default function DashboardPage() {
       {/* Quick actions */}
       <div>
         <h2 className="text-lg font-serif font-semibold text-charcoal mb-4">Quick Start</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickActions.map(({ href, label, description, icon: Icon, color, textColor }, i) => (
             <motion.div
               key={href}

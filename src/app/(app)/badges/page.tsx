@@ -92,7 +92,7 @@ export default function BadgesPage() {
       {/* XP guide */}
       <div className="bg-cream border border-cream-darker rounded-2xl p-5">
         <h3 className="font-semibold text-charcoal text-sm mb-3">How to earn XP</h3>
-        <div className="grid grid-cols-2 gap-2 text-xs text-muted">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-muted">
           <div>📖 Card reviewed → <strong>+10 XP</strong></div>
           <div>✅ Correct answer → <strong>+5 XP</strong></div>
           <div>🏁 Session complete → <strong>+20 XP</strong></div>

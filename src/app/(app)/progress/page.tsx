@@ -47,7 +47,7 @@ export default function ProgressPage() {
       </div>
 
       {/* Summary stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: "Total Cards", value: totalCards, icon: TrendingUp, color: "text-crimson" },
           { label: "Avg Accuracy", value: `${avgAccuracy}%`, icon: Target, color: "text-gold" },

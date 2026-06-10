@@ -19,6 +19,7 @@ export async function GET() {
     hasAnthropicKey: !!process.env.ANTHROPIC_API_KEY,
     hasGeminiKey: !!process.env.GEMINI_API_KEY,
     hasElevenLabsKey: !!process.env.ELEVENLABS_API_KEY,
+    hasStripeKey: !!process.env.STRIPE_SECRET_KEY,
   });
 }
 
