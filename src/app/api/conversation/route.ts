@@ -1,9 +1,12 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { anthropic, buildSystemPrompt, buildScenarioPrompt } from "@/lib/claude";
 import { streamGeminiConversation, isGeminiAvailable } from "@/lib/gemini";
+import { getSession } from "@/lib/auth";
+import { checkAndIncrementUsage } from "@/lib/usage";
 import { SCENARIOS, type Language } from "@/lib/types";
 
-function resolveProvider(requested: string): "claude" | "gemini" {
+function resolveProvider(requested: string, plan: string): "claude" | "gemini" {
+  if (plan === "free") return "claude";
   if (requested === "gemini" && isGeminiAvailable()) return "gemini";
   if (requested === "auto") {
     return isGeminiAvailable() ? "gemini" : "claude";
@@ -12,6 +15,12 @@ function resolveProvider(requested: string): "claude" | "gemini" {
 }
 
 export async function POST(req: NextRequest) {
+  const session = await getSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const limited = await checkAndIncrementUsage(session.userId, session.plan, "aiMessages");
+  if (limited) return NextResponse.json(limited, { status: 429 });
+
   const body = await req.json();
   const {
     messages,
@@ -37,7 +46,7 @@ export async function POST(req: NextRequest) {
     systemPrompt = buildSystemPrompt(language, difficulty);
   }
 
-  const provider = resolveProvider(requestedProvider);
+  const provider = resolveProvider(requestedProvider, session.plan);
 
   if (provider === "gemini") {
     const stream = await streamGeminiConversation(messages, systemPrompt);

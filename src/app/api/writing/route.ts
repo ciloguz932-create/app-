@@ -1,16 +1,25 @@
 import { NextResponse } from "next/server";
 import { anthropic } from "@/lib/claude";
 import { callGemini, isGeminiAvailable } from "@/lib/gemini";
+import { getSession } from "@/lib/auth";
+import { checkAndIncrementUsage } from "@/lib/usage";
 import type { Language } from "@/lib/types";
 import { LANGUAGE_CONFIG } from "@/lib/types";
 
-function resolveProvider(requested: string): "claude" | "gemini" {
+function resolveProvider(requested: string, plan: string): "claude" | "gemini" {
+  if (plan === "free") return "claude";
   if (requested === "gemini" && isGeminiAvailable()) return "gemini";
   if (requested === "auto") return isGeminiAvailable() ? "gemini" : "claude";
   return "claude";
 }
 
 export async function POST(req: Request) {
+  const session = await getSession();
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const limited = await checkAndIncrementUsage(session.userId, session.plan, "aiMessages");
+  if (limited) return NextResponse.json(limited, { status: 429 });
+
   const { word, sentences, language, provider: requestedProvider = "claude" } =
     (await req.json()) as {
       word: string;
@@ -19,7 +28,7 @@ export async function POST(req: Request) {
       provider?: string;
     };
 
-  const provider = resolveProvider(requestedProvider);
+  const provider = resolveProvider(requestedProvider, session.plan);
 
   if (provider === "claude" && !process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
