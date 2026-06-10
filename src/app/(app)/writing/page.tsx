@@ -6,6 +6,7 @@ import { Loader2, PenTool, RefreshCw, Send, Sparkles } from "lucide-react";
 import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/ThemeProvider";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 interface Card {
   id: string;
@@ -61,6 +62,7 @@ export default function WritingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<WritingResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   useEffect(() => {
     setLoadingCards(true);
@@ -103,6 +105,10 @@ export default function WritingPage() {
         }),
       });
       const data = await res.json();
+      if (res.status === 429) {
+        setShowUpgrade(true);
+        return;
+      }
       if (!res.ok) throw new Error(data.error ?? "Failed to evaluate");
       setResult(data as WritingResult);
     } catch (err) {
@@ -132,6 +138,7 @@ export default function WritingPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} />
       <div>
         <h1 className="text-2xl font-serif font-bold text-charcoal flex items-center gap-2">
           <PenTool className="w-6 h-6 text-crimson" /> Spaced Writing

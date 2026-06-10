@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 import { useTheme } from "@/components/ThemeProvider";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 interface Message {
   role: "user" | "assistant";
@@ -25,6 +26,7 @@ export default function ConversationChat({ language, difficulty, scenarioId, ini
   );
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { aiProvider } = useTheme();
@@ -66,6 +68,13 @@ export default function ConversationChat({ language, difficulty, scenarioId, ini
           provider: aiProvider,
         }),
       });
+
+      if (response.status === 429) {
+        setShowUpgrade(true);
+        setMessages((prev) => prev.slice(0, -1)); // drop empty assistant bubble
+        setLoading(false);
+        return;
+      }
 
       if (!response.body) throw new Error("No response body");
 
@@ -110,6 +119,7 @@ export default function ConversationChat({ language, difficulty, scenarioId, ini
 
   return (
     <div className="flex flex-col h-full min-h-[500px]">
+      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} />
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {messages.length === 0 && (

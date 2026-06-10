@@ -6,6 +6,7 @@ import { Brain, Loader2, RefreshCw, Send, Sparkles } from "lucide-react";
 import { LANGUAGE_CONFIG, type Language } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/ThemeProvider";
+import { UpgradeModal } from "@/components/UpgradeModal";
 
 interface Card {
   id: string;
@@ -57,6 +58,7 @@ export default function FeynmanPage() {
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<FeynmanResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showUpgrade, setShowUpgrade] = useState(false);
 
   useEffect(() => {
     setLoadingCards(true);
@@ -98,6 +100,10 @@ export default function FeynmanPage() {
         }),
       });
       const data = await res.json();
+      if (res.status === 429) {
+        setShowUpgrade(true);
+        return;
+      }
       if (!res.ok) {
         throw new Error(data.error ?? "Failed to evaluate");
       }
@@ -121,6 +127,7 @@ export default function FeynmanPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
+      <UpgradeModal open={showUpgrade} onClose={() => setShowUpgrade(false)} />
       <div>
         <h1 className="text-2xl font-serif font-bold text-charcoal flex items-center gap-2">
           <Brain className="w-6 h-6 text-crimson" /> Feynman Technique
