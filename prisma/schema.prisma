@@ -7,8 +7,52 @@ datasource db {
   provider = "sqlite"
 }
 
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  passwordHash  String
+  avatarEmoji   String    @default("🎓")
+  avatarColor   String    @default("#A51C30")
+  role          String    @default("user")
+  plan          String    @default("free")
+  planUpdatedAt DateTime?
+  createdAt     DateTime  @default(now())
+  cards         Card[]
+  reviews       Review[]
+  sessions      StudySession[]
+  progress      ProgressEntry[]
+  badges        Badge[]
+  appState      AppState?
+  xpEvents      XpEvent[]
+  usage         UsageCounter[]
+}
+
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  amount    Int
+  reason    String   @default("review")
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model UsageCounter {
+  id          String @id @default(cuid())
+  userId      String
+  date        String
+  aiMessages  Int    @default(0)
+  ttsRequests Int    @default(0)
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
 model Card {
   id          String   @id @default(cuid())
+  userId      String
   word        String
   translation String
   language    String
@@ -20,48 +64,71 @@ model Card {
   dueDate     DateTime @default(now())
   createdAt   DateTime @default(now())
   isFavorite  Boolean  @default(false)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   reviews     Review[]
+
+  @@index([userId])
 }
 
 model Review {
   id         String   @id @default(cuid())
   cardId     String
+  userId     String
   quality    Int
   reviewedAt DateTime @default(now())
   card       Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model StudySession {
   id           String    @id @default(cuid())
+  userId       String
   type         String
   cardsStudied Int       @default(0)
   accuracy     Float     @default(0)
   duration     Int       @default(0)
   startedAt    DateTime  @default(now())
   endedAt      DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model ProgressEntry {
   id           String   @id @default(cuid())
-  date         DateTime @unique
+  userId       String
+  date         DateTime
   cardsStudied Int
   accuracy     Float
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
 }
 
 model AppState {
-  id          Int      @id @default(1)
-  streak      Int      @default(0)
+  id          String    @id @default(cuid())
+  userId      String    @unique
+  streak      Int       @default(0)
   lastStudied DateTime?
-  dailyGoal   Int      @default(10)
-  xp          Int      @default(0)
-  level       Int      @default(1)
-  aiProvider  String   @default("claude")
+  dailyGoal   Int       @default(10)
+  xp          Int       @default(0)
+  level       Int       @default(1)
+  aiProvider  String    @default("claude")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Badge {
   id         String   @id @default(cuid())
-  key        String   @unique
+  userId     String
+  key        String
   unlockedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@index([userId])
 }
 
 model ReadingPassage {
