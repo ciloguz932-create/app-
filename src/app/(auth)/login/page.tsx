@@ -29,8 +29,8 @@ function LoginForm() {
           password: demoEmail ? "Lumina2026!" : password,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Giriş başarısız");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string }).error ?? "Giriş başarısız");
       router.push(next);
       router.refresh();
     } catch (err) {

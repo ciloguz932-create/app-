@@ -28,8 +28,8 @@ export default function RegisterPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password, avatarEmoji: avatar }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Kayıt başarısız");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string }).error ?? "Kayıt başarısız");
       router.push("/dashboard");
       router.refresh();
     } catch (err) {
