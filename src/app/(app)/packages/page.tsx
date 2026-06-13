@@ -138,7 +138,7 @@ export default function PackagesPage() {
         </div>
 
         {/* Vocabulary preview */}
-        <div className="bg-white border-2 border-cream-darker rounded-2xl p-6">
+        <div className="bg-surface border-2 border-cream-darker rounded-2xl p-6">
           <h3 className="flex items-center gap-2 font-serif font-bold text-charcoal mb-4">
             <BookOpen className="w-4 h-4 text-crimson" /> Kelimeler ({selected.vocabulary.length})
           </h3>
@@ -161,7 +161,7 @@ export default function PackagesPage() {
         </div>
 
         {/* Patterns */}
-        <div className="bg-white border-2 border-cream-darker rounded-2xl p-6">
+        <div className="bg-surface border-2 border-cream-darker rounded-2xl p-6">
           <h3 className="flex items-center gap-2 font-serif font-bold text-charcoal mb-4">
             <MessageSquareQuote className="w-4 h-4 text-crimson" /> Cümle Kalıpları ({selected.patterns.length})
           </h3>
@@ -184,7 +184,7 @@ export default function PackagesPage() {
         </div>
 
         {/* Readings */}
-        <div className="bg-white border-2 border-cream-darker rounded-2xl p-6">
+        <div className="bg-surface border-2 border-cream-darker rounded-2xl p-6">
           <h3 className="flex items-center gap-2 font-serif font-bold text-charcoal mb-4">
             <FileText className="w-4 h-4 text-crimson" /> Okuma Metinleri ({selected.readings.length})
           </h3>
@@ -252,7 +252,7 @@ export default function PackagesPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.06 }}
-              className="bg-white border-2 border-cream-darker rounded-2xl p-5 flex flex-col hover:shadow-md transition-shadow"
+              className="bg-surface border-2 border-cream-darker rounded-2xl p-5 flex flex-col hover:shadow-md transition-shadow"
             >
               <button onClick={() => setSelected(pkg)} className="text-left flex-1">
                 <div className="flex items-start justify-between mb-3">

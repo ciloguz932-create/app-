@@ -144,7 +144,7 @@ export default function ScenariosPage() {
           {/* Starter message preview */}
           <div>
             <p className="text-xs font-medium text-muted uppercase tracking-wider mb-2">Opening line</p>
-            <div className="bg-white border border-cream-darker rounded-xl px-4 py-3">
+            <div className="bg-surface border border-cream-darker rounded-xl px-4 py-3">
               <p
                 className={cn(
                   "text-sm text-charcoal italic",

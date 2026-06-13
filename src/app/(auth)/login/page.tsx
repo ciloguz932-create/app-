@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Loader2, LogIn, Sparkles, Crown } from "lucide-react";
 
 function LoginForm() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/dashboard";
 
@@ -31,8 +30,9 @@ function LoginForm() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error((data as { error?: string }).error ?? "Giriş başarısız");
-      router.push(next);
-      router.refresh();
+      // Full-page navigation so the session is read fresh everywhere
+      // (ThemeProvider re-mounts and refetches the correct user).
+      window.location.assign(next);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
       setLoading(false);

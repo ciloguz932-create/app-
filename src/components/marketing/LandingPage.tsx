@@ -141,7 +141,7 @@ export function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="px-6 py-16 bg-white border-y border-cream-darker">
+      <section className="px-6 py-16 bg-surface border-y border-cream-darker">
         <div className="max-w-6xl mx-auto">
           <h2 className="font-serif text-3xl font-bold text-charcoal text-center mb-12">
             Her şey bilimsel, her şey bir arada
@@ -181,7 +181,7 @@ export function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-white border-2 border-cream-darker rounded-2xl p-6"
+                className="bg-surface border-2 border-cream-darker rounded-2xl p-6"
               >
                 <div className="flex gap-0.5 mb-3">
                   {[...Array(5)].map((_, s) => (
@@ -198,7 +198,7 @@ export function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section className="px-6 py-16 bg-white border-y border-cream-darker">
+      <section className="px-6 py-16 bg-surface border-y border-cream-darker">
         <h2 className="font-serif text-3xl font-bold text-charcoal text-center mb-3">
           Basit, şeffaf fiyatlandırma
         </h2>

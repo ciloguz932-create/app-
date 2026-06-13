@@ -78,7 +78,7 @@ export function PricingSection({ loggedIn = false }: { loggedIn?: boolean }) {
               "rounded-3xl p-7 border-2 flex flex-col",
               tier.highlight
                 ? "bg-charcoal text-cream border-gold shadow-xl sm:scale-[1.03]"
-                : "bg-white text-charcoal border-cream-darker"
+                : "bg-surface text-charcoal border-cream-darker"
             )}
           >
             {tier.highlight && (

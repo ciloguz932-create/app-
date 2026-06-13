@@ -162,13 +162,13 @@ export default function DashboardPage() {
         >
           <div className="relative w-24 h-24 flex-shrink-0">
             <svg width="96" height="96" viewBox="0 0 96 96" className="-rotate-90">
-              <circle cx="48" cy="48" r={radius} fill="none" stroke="#E5D9C5" strokeWidth="6" />
+              <circle cx="48" cy="48" r={radius} fill="none" stroke="var(--color-cream-darker)" strokeWidth="6" />
               <motion.circle
                 cx="48"
                 cy="48"
                 r={radius}
                 fill="none"
-                stroke="#C5A028"
+                stroke="var(--color-gold)"
                 strokeWidth="6"
                 strokeLinecap="round"
                 strokeDasharray={circ}

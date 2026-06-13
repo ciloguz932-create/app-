@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Loader2, UserPlus } from "lucide-react";
@@ -10,7 +9,6 @@ import { cn } from "@/lib/utils";
 const AVATARS = ["🎓", "📚", "🦉", "🌟", "🚀", "🧠", "🌍", "✨"];
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,8 +28,8 @@ export default function RegisterPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error((data as { error?: string }).error ?? "Kayıt başarısız");
-      router.push("/dashboard");
-      router.refresh();
+      // Full-page navigation so the new session is read fresh everywhere.
+      window.location.assign("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Bir hata oluştu");
       setLoading(false);

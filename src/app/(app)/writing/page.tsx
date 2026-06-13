@@ -186,7 +186,7 @@ export default function WritingPage() {
               setResult(null);
               setError(null);
             }}
-            className="w-full bg-white border border-cream-darker rounded-xl px-4 py-3 text-sm text-charcoal focus:outline-none focus:border-crimson"
+            className="w-full bg-surface border border-cream-darker rounded-xl px-4 py-3 text-sm text-charcoal focus:outline-none focus:border-crimson"
           >
             {cards.map((c) => (
               <option key={c.id} value={c.id}>
@@ -318,7 +318,7 @@ export default function WritingPage() {
                       </span>
                     </div>
                     {s.correction && s.correction !== s.text && (
-                      <div className="bg-white/60 border border-cream-darker rounded-lg px-3 py-2">
+                      <div className="bg-surface/60 border border-cream-darker rounded-lg px-3 py-2">
                         <p className="text-[10px] font-medium text-muted uppercase tracking-wider mb-1">
                           Suggested
                         </p>

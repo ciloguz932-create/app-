@@ -118,7 +118,7 @@ export default function VocabularyPage() {
                   onChange={(e) => setForm((f) => ({ ...f, word: e.target.value }))}
                   placeholder={form.language === "ar" ? "الكلمة العربية" : "English word"}
                   dir={form.language === "ar" ? "rtl" : "ltr"}
-                  className={cn("w-full bg-white border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30", form.language === "ar" ? "font-arabic text-base" : "")}
+                  className={cn("w-full bg-surface border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30", form.language === "ar" ? "font-arabic text-base" : "")}
                 />
               </div>
               <div>
@@ -127,7 +127,7 @@ export default function VocabularyPage() {
                   value={form.translation}
                   onChange={(e) => setForm((f) => ({ ...f, translation: e.target.value }))}
                   placeholder="Türkçe çeviri"
-                  className="w-full bg-white border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30"
+                  className="w-full bg-surface border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30"
                 />
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function VocabularyPage() {
                 <select
                   value={form.language}
                   onChange={(e) => setForm((f) => ({ ...f, language: e.target.value }))}
-                  className="w-full bg-white border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30"
+                  className="w-full bg-surface border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30"
                 >
                   <option value="en">🇬🇧 English</option>
                   <option value="ar">🇸🇦 Arabic</option>
@@ -151,7 +151,7 @@ export default function VocabularyPage() {
                   onChange={(e) => setForm((f) => ({ ...f, example: e.target.value }))}
                   placeholder="Example usage..."
                   dir={form.language === "ar" ? "rtl" : "ltr"}
-                  className={cn("w-full bg-white border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30", form.language === "ar" ? "font-arabic" : "")}
+                  className={cn("w-full bg-surface border border-cream-darker rounded-xl px-4 py-2.5 text-charcoal text-sm focus:outline-none focus:ring-2 focus:ring-crimson/30", form.language === "ar" ? "font-arabic" : "")}
                 />
               </div>
             </div>

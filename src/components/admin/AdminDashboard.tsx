@@ -62,7 +62,7 @@ const PLAN_LABELS: Record<string, string> = {
 
 function StatCard({ icon: Icon, label, value }: { icon: typeof Users; label: string; value: number }) {
   return (
-    <div className="bg-white border-2 border-cream-darker rounded-2xl p-5 flex items-center gap-4">
+    <div className="bg-surface border-2 border-cream-darker rounded-2xl p-5 flex items-center gap-4">
       <div className="w-11 h-11 bg-crimson/10 rounded-xl flex items-center justify-center">
         <Icon className="w-5 h-5 text-crimson" />
       </div>
@@ -135,7 +135,7 @@ export default function AdminDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white border-2 border-cream-darker rounded-2xl p-6"
+            className="bg-surface border-2 border-cream-darker rounded-2xl p-6"
           >
             <h2 className="font-serif font-bold text-charcoal mb-4">Kayıtlar (son 30 gün)</h2>
             <ResponsiveContainer width="100%" height={220}>
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white border-2 border-cream-darker rounded-2xl p-6"
+            className="bg-surface border-2 border-cream-darker rounded-2xl p-6"
           >
             <h2 className="font-serif font-bold text-charcoal mb-4">Plan dağılımı</h2>
             <ResponsiveContainer width="100%" height={220}>
@@ -203,7 +203,7 @@ export default function AdminDashboard() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="bg-white border-2 border-cream-darker rounded-2xl overflow-hidden"
+          className="bg-surface border-2 border-cream-darker rounded-2xl overflow-hidden"
         >
           <div className="px-6 py-4 border-b border-cream-darker">
             <h2 className="font-serif font-bold text-charcoal">Kullanıcılar</h2>

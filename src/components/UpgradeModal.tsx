@@ -25,7 +25,7 @@ export function UpgradeModal({ open, onClose }: UpgradeModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 16 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl p-8 max-w-sm w-full relative"
+            className="bg-surface rounded-3xl p-8 max-w-sm w-full relative"
           >
             <button
               onClick={onClose}

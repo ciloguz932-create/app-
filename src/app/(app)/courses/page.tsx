@@ -152,7 +152,7 @@ export default function CoursesPage() {
               {selected.vocabulary.map((v) => (
                 <div
                   key={`${v.word}-${v.translation}`}
-                  className="bg-white border border-cream-darker rounded-xl px-3 py-2"
+                  className="bg-surface border border-cream-darker rounded-xl px-3 py-2"
                 >
                   <p className="text-sm font-semibold text-charcoal">{v.word}</p>
                   <p className="text-xs text-muted">{v.translation}</p>
