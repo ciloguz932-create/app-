@@ -47,6 +47,7 @@ const TABLES = [
     "word" TEXT NOT NULL,
     "translation" TEXT NOT NULL,
     "language" TEXT NOT NULL,
+    "topic" TEXT,
     "example" TEXT,
     "notes" TEXT,
     "interval" INTEGER NOT NULL DEFAULT 1,

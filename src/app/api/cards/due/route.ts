@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const language = searchParams.get("language");
+  const topic = searchParams.get("topic");
   const limit = parseInt(searchParams.get("limit") || "20");
 
   const now = new Date();
@@ -17,6 +18,7 @@ export async function GET(req: NextRequest) {
       userId: session.userId,
       dueDate: { lte: now },
       ...(language && language !== "all" ? { language } : {}),
+      ...(topic && topic !== "all" ? { topic } : {}),
     },
     orderBy: { dueDate: "asc" },
     take: limit,

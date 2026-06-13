@@ -19,9 +19,10 @@ interface Card {
 
 interface StudySessionProps {
   language?: string;
+  topic?: string;
 }
 
-export default function StudySession({ language = "all" }: StudySessionProps) {
+export default function StudySession({ language = "all", topic = "all" }: StudySessionProps) {
   const [cards, setCards] = useState<Card[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -34,7 +35,7 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
   const { addXP } = useTheme();
 
   useEffect(() => {
-    fetch(`/api/cards/due?language=${language}&limit=20`)
+    fetch(`/api/cards/due?language=${language}&topic=${encodeURIComponent(topic)}&limit=20`)
       .then((r) => r.json())
       .then((data) => {
         setCards(Array.isArray(data) ? data : []);
@@ -45,7 +46,7 @@ export default function StudySession({ language = "all" }: StudySessionProps) {
         setCards([]);
         setLoading(false);
       });
-  }, [language]);
+  }, [language, topic]);
 
   const handleFlip = (f: boolean) => {
     setFlipped(f);

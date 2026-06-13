@@ -386,3 +386,26 @@ Léa paie et sort dans la rue. Le ciel est bleu et les cafés ouvrent leurs terr
 export function getPackage(id: string): ContentPackage | undefined {
   return CONTENT_PACKAGES.find((p) => p.id === id);
 }
+
+export interface TopicMeta {
+  id: string;
+  label: string;
+  emoji: string;
+  color: string;
+}
+
+// Maps a card's `topic` value to display metadata for the study launcher.
+// "core" = the starter deck; a package id = that package; anything else
+// (including null) = the learner's own added cards.
+export function getTopicMeta(topicId: string | null | undefined): TopicMeta {
+  if (topicId === "core") {
+    return { id: "core", label: "Temel Kelimeler", emoji: "📘", color: "#A51C30" };
+  }
+  if (topicId) {
+    const pkg = getPackage(topicId);
+    if (pkg) {
+      return { id: pkg.id, label: pkg.title, emoji: pkg.emoji, color: pkg.color };
+    }
+  }
+  return { id: "custom", label: "Kendi Kartlarım", emoji: "📝", color: "#7A6B55" };
+}

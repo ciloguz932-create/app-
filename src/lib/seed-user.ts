@@ -20,6 +20,7 @@ export async function seedUserData(prisma: PrismaClient, userId: string) {
       word: w.word,
       translation: w.translation,
       language: w.language,
+      topic: "core",
       example: w.example ?? null,
     })),
   });

@@ -42,9 +42,20 @@ export async function GET(req: NextRequest) {
     const results = await Promise.all([
       addColumnIfMissing(client, "User", "stripeCustomerId", "TEXT"),
       addColumnIfMissing(client, "User", "stripeSubscriptionId", "TEXT"),
+      addColumnIfMissing(client, "Card", "topic", "TEXT"),
     ]);
 
-    return NextResponse.json({ ok: true, migrations: results });
+    // Backfill: starter-deck cards (notes IS NULL) get the "core" topic so
+    // they appear under "Temel Kelimeler" in the new study launcher.
+    const backfill = await client.execute(
+      `UPDATE "Card" SET "topic" = 'core' WHERE "topic" IS NULL AND "notes" IS NULL`
+    );
+
+    return NextResponse.json({
+      ok: true,
+      migrations: results,
+      backfilledCoreCards: backfill.rowsAffected,
+    });
   } catch (err) {
     const detail = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: "Migration failed", detail }, { status: 500 });
