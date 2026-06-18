@@ -84,7 +84,7 @@ export default function LeaderboardPage() {
                 "px-5 py-2.5 rounded-xl text-sm font-bold transition-all",
                 tab === t
                   ? "bg-charcoal text-cream"
-                  : "bg-white border border-cream-darker text-muted hover:text-charcoal"
+                  : "bg-cream border border-cream-darker text-muted hover:text-charcoal"
               )}
             >
               {t === "weekly" ? "Bu hafta" : "Tüm zamanlar"}
@@ -150,7 +150,7 @@ export default function LeaderboardPage() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 + i * 0.04 }}
                     className={cn(
-                      "flex items-center gap-4 bg-white border-2 rounded-2xl px-5 py-3",
+                      "flex items-center gap-4 bg-surface border-2 rounded-2xl px-5 py-3",
                       isMe ? "border-crimson" : "border-cream-darker"
                     )}
                   >

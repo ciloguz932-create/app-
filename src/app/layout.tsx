@@ -32,7 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             wrong theme (especially dark → white). Mirrors src/lib/themes.ts. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t='light';}if(t==='dark'){var v={'--color-crimson':'#E03050','--color-crimson-light':'#F04060','--color-crimson-dark':'#C01840','--color-cream':'#0A0A0A','--color-cream-dark':'#141414','--color-cream-darker':'#1E1E1E','--color-surface':'#161616','--color-gold':'#FFFFFF','--color-gold-light':'#EEEEEE','--color-gold-dark':'#CCCCCC','--color-charcoal':'#FFFFFF','--color-muted':'#AAAAAA','--background':'#0A0A0A','--foreground':'#FFFFFF','--sidebar-bg':'#050505','--sidebar-text':'#FFFFFF'};var r=document.documentElement;for(var k in v){r.style.setProperty(k,v[k]);}r.setAttribute('data-theme','dark');}}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark'){t='light';}if(t==='dark'){var v={'--color-crimson':'#E03050','--color-crimson-light':'#F04060','--color-crimson-dark':'#C01840','--color-cream':'#0A0A0A','--color-cream-dark':'#141414','--color-cream-darker':'#1E1E1E','--color-surface':'#161616','--color-gold':'#FFFFFF','--color-gold-light':'#EEEEEE','--color-gold-dark':'#CCCCCC','--color-charcoal':'#FFFFFF','--color-muted':'#AAAAAA','--background':'#0A0A0A','--foreground':'#FFFFFF','--sidebar-bg':'#0D0D0D','--sidebar-text':'#FFFFFF','--sidebar-border':'rgba(255,255,255,0.08)'};var r=document.documentElement;for(var k in v){r.style.setProperty(k,v[k]);}r.setAttribute('data-theme','dark');}}catch(e){}})();`,
           }}
         />
       </head>

@@ -62,7 +62,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
   return (
     <>
       {open && (
-        <div className="fixed inset-0 bg-charcoal/50 z-40 lg:hidden" onClick={onClose} />
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={onClose} />
       )}
 
       <aside
@@ -74,10 +74,10 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         style={{ backgroundColor: "var(--sidebar-bg)", color: "var(--sidebar-text)" }}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-6 py-6" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+        <div className="flex items-center justify-between px-6 py-6" style={{ borderBottom: "1px solid var(--sidebar-border)" }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-[var(--color-crimson)] rounded-lg flex items-center justify-center">
-              <GraduationCap className="w-5 h-5" style={{ color: "var(--sidebar-text)" }} />
+              <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div>
               <p className="font-serif text-lg font-semibold leading-none" style={{ color: "var(--sidebar-text)" }}>Lumina</p>
@@ -103,7 +103,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                 )}
                 style={{
                   backgroundColor: active ? "var(--color-crimson)" : "transparent",
-                  color: active ? "var(--sidebar-text)" : `color-mix(in srgb, var(--sidebar-text) 70%, transparent)`,
+                  color: active ? "#FFFFFF" : `color-mix(in srgb, var(--sidebar-text) 70%, transparent)`,
                 }}
               >
                 <Icon className="w-5 h-5" style={{ opacity: active ? 1 : 0.5 }} />
@@ -119,8 +119,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
               style={{
                 backgroundColor: pathname.startsWith("/admin") ? "var(--color-gold)" : "transparent",
                 color: pathname.startsWith("/admin")
-                  ? "#2C2C2C"
-                  : `color-mix(in srgb, var(--color-gold) 85%, transparent)`,
+                  ? "#111111"
+                  : `color-mix(in srgb, var(--sidebar-text) 70%, transparent)`,
               }}
             >
               <ShieldCheck className="w-5 h-5" />
@@ -130,7 +130,7 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
         </nav>
 
         {/* Bottom */}
-        <div className="px-4 py-4 space-y-4" style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+        <div className="px-4 py-4 space-y-4" style={{ borderTop: "1px solid var(--sidebar-border)" }}>
           {user && (
             <div className="flex items-center gap-3 px-1">
               <div

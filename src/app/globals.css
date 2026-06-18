@@ -24,6 +24,9 @@
 :root {
   --background: #FFFFFF;
   --foreground: #111111;
+  --sidebar-bg: #FFFFFF;
+  --sidebar-text: #111111;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
 }
 
 * {

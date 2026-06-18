@@ -27,8 +27,9 @@ export const THEMES: ThemeConfig[] = [
       "--color-muted": "#666666",
       "--background": "#FFFFFF",
       "--foreground": "#111111",
-      "--sidebar-bg": "#111111",
-      "--sidebar-text": "#FFFFFF",
+      "--sidebar-bg": "#FFFFFF",
+      "--sidebar-text": "#111111",
+      "--sidebar-border": "rgba(0, 0, 0, 0.08)",
     },
   },
   {
@@ -50,8 +51,9 @@ export const THEMES: ThemeConfig[] = [
       "--color-muted": "#AAAAAA",
       "--background": "#0A0A0A",
       "--foreground": "#FFFFFF",
-      "--sidebar-bg": "#050505",
+      "--sidebar-bg": "#0D0D0D",
       "--sidebar-text": "#FFFFFF",
+      "--sidebar-border": "rgba(255, 255, 255, 0.08)",
     },
   },
 ];
